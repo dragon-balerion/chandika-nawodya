@@ -10,9 +10,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     
-    <!-- Typed.js for Terminal Animation -->
-    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
-
     <style>
         /* ------------------- */
         /* --- Root & Globals --- */
@@ -47,7 +44,7 @@
             background-color: var(--background-color);
             color: var(--text-light);
             font-family: var(--font-sans);
-            /* Subtle scan lines effect */
+            /* Animated Scan Lines */
             background-image: repeating-linear-gradient(
                 0deg, 
                 rgba(0, 255, 65, 0.05), 
@@ -55,7 +52,13 @@
                 transparent 1px, 
                 transparent 3px
             );
+            animation: scanline 20s linear infinite;
             overflow-x: hidden;
+        }
+        
+        @keyframes scanline {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100vh; }
         }
 
         .container {
@@ -63,6 +66,14 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 80px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        
+        .container.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         h1, h2, h3 {
@@ -128,6 +139,7 @@
             font-family: var(--font-mono);
             font-size: 1rem;
             transition: color 0.3s, text-shadow 0.3s;
+            position: relative;
         }
 
         nav a:hover, nav a.active {
@@ -162,10 +174,13 @@
         .terminal-window {
             width: 100%;
             max-width: 800px;
+            height: 500px;
             background-color: rgba(26, 26, 26, 0.9);
             border: 1px solid var(--border-color);
             border-radius: 8px;
             box-shadow: 0 0 25px rgba(0, 255, 65, 0.1);
+            display: flex;
+            flex-direction: column;
         }
 
         .terminal-header {
@@ -192,25 +207,66 @@
             font-family: var(--font-mono);
             font-size: 1.1rem;
             color: var(--primary-green);
-            min-height: 250px;
+            flex-grow: 1;
+            overflow-y: auto;
+            cursor: text;
         }
         
         .terminal-body .prompt {
             color: var(--text-light);
         }
-        
-        .typed-cursor {
-            color: var(--primary-green);
-            opacity: 1;
-            animation: typed-blink 0.7s infinite;
+
+        .terminal-line {
+            display: flex;
         }
+
+        .terminal-input {
+            background: transparent;
+            border: none;
+            color: var(--primary-green);
+            font-family: var(--font-mono);
+            font-size: 1.1rem;
+            flex-grow: 1;
+            caret-color: var(--primary-green);
+        }
+        
+        .terminal-input:focus {
+            outline: none;
+        }
+        
+        .cursor {
+            width: 10px;
+            height: 1.2em;
+            background: var(--primary-green);
+            display: inline-block;
+            animation: typed-blink 0.7s infinite;
+            vertical-align: middle;
+        }
+
         @keyframes typed-blink {
             50% { opacity: 0.0; }
         }
 
+        .terminal-output {
+            white-space: pre-wrap;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+        
         /* ------------------- */
         /* --- Projects Section --- */
         /* ------------------- */
+        .project-filters {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .filter-btn {
+            margin: 0 10px;
+            padding: 10px 20px;
+            font-size: 1rem;
+        }
+
         .project-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -222,8 +278,14 @@
             border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 25px;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s, opacity 0.5s;
             overflow: hidden;
+        }
+
+        .project-card.hidden {
+            transform: scale(0.9);
+            opacity: 0;
+            display: none;
         }
 
         .project-card:hover {
@@ -287,24 +349,30 @@
         .skill-category li {
             margin-bottom: 10px;
             font-size: 1.1rem;
+            display: flex;
+            align-items: center;
         }
-        .skill-category li::before {
-            content: '>';
+        .skill-category li svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--primary-green);
             margin-right: 10px;
-            color: var(--primary-green);
         }
+
 
         /* ------------------- */
         /* --- About Section --- */
         /* ------------------- */
         #about .container {
             display: flex;
-            gap: 50px;
-            align-items: center;
+            flex-direction: column; /* Stack image and text vertically */
+            align-items: center;   /* Center items horizontally */
+            text-align: center;    /* Center the text within its container */
+            gap: 30px;
         }
         
         .about-content {
-            flex: 2;
+            max-width: 800px; /* Constrain text width for better readability */
         }
 
         .about-content p {
@@ -313,14 +381,12 @@
         }
         
         .about-image {
-            flex: 1;
-            max-width: 300px;
-            text-align: center;
+            max-width: 250px; /* Control the max size of the image */
+            margin-bottom: 20px; /* Add space between image and text */
         }
         
         .about-image img {
             width: 100%;
-            max-width: 250px;
             height: auto;
             border-radius: 50%; /* Makes the image circular */
             border: 3px solid var(--primary-green);
@@ -364,7 +430,7 @@
             text-transform: uppercase;
             cursor: pointer;
             transition: background-color 0.3s, box-shadow 0.3s;
-            align-self: flex-start;
+            align-self: center; /* Center buttons in flex containers */
             text-decoration: none; /* For <a> tags styled as buttons */
             display: inline-block; /* For <a> tags */
             text-align: center;
@@ -464,12 +530,7 @@
                 transform: rotate(45deg) translate(-5px, -6px);
             }
             
-            #about .container {
-                flex-direction: column;
-            }
-            
             .about-image {
-                margin-top: 40px;
                 max-width: 200px;
             }
         }
@@ -513,8 +574,8 @@
                     <div class="terminal-button yellow"></div>
                     <div class="terminal-button green"></div>
                 </div>
-                <div class="terminal-body">
-                    <span id="terminal-text"></span>
+                <div class="terminal-body" id="terminal-body">
+                    <!-- Interactive terminal content is generated here by JavaScript -->
                 </div>
             </div>
         </section>
@@ -522,9 +583,14 @@
         <!-- Projects Section -->
         <section id="projects" class="container">
             <h2>Projects</h2>
+            <div class="project-filters">
+                <button class="btn filter-btn" data-filter="all">All</button>
+                <button class="btn filter-btn" data-filter="cybersecurity">Cybersecurity</button>
+                <button class="btn filter-btn" data-filter="design">Graphic Design & Video Editing</button>
+            </div>
             <div class="project-grid">
                 <!-- Project 1: SOC Lab -->
-                <div class="project-card">
+                <div class="project-card" data-category="cybersecurity">
                     <h3>Home SOC Lab with Wazuh</h3>
                     <p>Designed and deployed a fully functional Security Operations Center (SOC) home lab using Wazuh SIEM for real-time threat detection, log analysis, and incident response simulation.</p>
                     <div class="project-tags">
@@ -532,10 +598,12 @@
                         <span>SIEM</span>
                         <span>Network Security</span>
                         <span>Virtualization</span>
+                        <span>Ubuntu Server</span>
+                        <span>Kali Linux</span>
                     </div>
                 </div>
                 <!-- Project 2: Keylogger -->
-                <div class="project-card">
+                <div class="project-card" data-category="cybersecurity">
                     <h3>Simple Python Keylogger</h3>
                     <p>Developed a keylogger in Python for educational purposes to understand system-level monitoring, data capture techniques, and fundamental concepts of offensive security tools.</p>
                     <div class="project-tags">
@@ -546,14 +614,14 @@
                     </div>
                 </div>
                 <!-- Project 3: Graphic Design -->
-                <div class="project-card">
-                    <h3>Graphic Designing</h3>
-                    <p>Conceptualized and executed a complete brand identity for a clients, including logo design, color theory, typography, and marketing collateral to create a cohesive and impactful brand presence.</p>
+                <div class="project-card" data-category="design">
+                    <h3>Graphic Designing & Video Editing</h3>
+                    <p>Conceptualized and executed a complete brand identity for a client, including logo design, color theory, typography, and marketing collateral to create a cohesive and impactful brand presence.</p>
                     <div class="project-tags">
                         <span>Adobe Photoshop</span>
                         <span>Logo Design</span>
                         <span>Adobe Illustrator</span>
-                        <span>Client Work</span>
+                        <span>Davinci Resolve</span>
                     </div>
                 </div>
             </div>
@@ -566,33 +634,29 @@
                 <div class="skill-category">
                     <h3>Cybersecurity</h3>
                     <ul>
-                        <li>Network Security</li>
-                        <li>Security Analysis</li>
-                        <li>Digital Forensics</li>
-                        <li>SIEM (Wazuh)</li>
-                        <li>Endpoint Security</li>
-                        <li>Ethical Hacking</li>
+                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 1.043l-9.373 4.477v6.234c0 5.485 3.981 10.27 9.373 11.203 5.392-.933 9.373-5.718 9.373-11.203V5.52L12 1.043zm0 2.115l7.627 3.64-6.254 2.983L5.746 6.78l6.254-2.982zM3.75 7.31l7.5 3.578v9.963c-4.47-1.02-7.5-4.86-7.5-9.673V7.31zm8.999 13.541V10.888l7.5-3.578v6.423c0 4.813-3.03 8.653-7.5 9.673z"/></svg>Network Security</li>
+                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>Security Analysis</li>
+                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.5 6.5c-2.76 0-5 2.24-5 5s2.24 5 5 5a5.002 5.002 0 005-5c0-2.76-2.24-5-5-5zm0 8c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3zm-.001-13C5.148 1.5.001 6.648.001 13S5.148 24.5 11.499 24.5 23 19.352 23 13 17.852 1.5 11.499 1.5zm0 21C6.262 22.5 2 18.238 2 13S6.262 3.5 11.5 3.5 21 7.762 21 13s-4.262 9.5-9.5 9.5z"/></svg>Digital Forensics</li>
+                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 21.5c.83 0 1.5-.67 1.5-1.5v-8c0-.83-.67-1.5-1.5-1.5S7.5 11.17 7.5 12v8c0 .83.67 1.5 1.5 1.5zm4.5-1.5v-5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5zm3-3v-2c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v2c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5zM22 6H12l-2-4H2C.9 2 0 2.9 0 4v16c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"/></svg>SIEM (Wazuh)</li>
                     </ul>
                 </div>
                 <div class="skill-category">
                     <h3>Graphic Design</h3>
                     <ul>
-                        <li>Branding & Identity</li>
-                        <li>Logo Design</li>
-                        <li>UI/UX Concepts</li>
-                        <li>Adobe Illustrator</li>
-                        <li>Adobe Photoshop</li>
-                        <li>Figma</li>
+                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>Adobe Photoshop</li>
+                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-12H9v2h2v2H9v2h2v2H9v2h4v-2h2v-2h-2v-2h2v-2h-2V8h-2z"/></svg>Logo Design</li>
+                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.05 4.95C17.59 3.49 15.65 2.5 13.5 2.5s-4.09.99-5.55 2.45C6.49 6.41 5.5 8.35 5.5 10.5S6.49 14.59 7.95 16.05c1.46 1.46 3.4 2.45 5.55 2.45s4.09-.99 5.55-2.45c1.46-1.46 2.45-3.4 2.45-5.55s-.99-4.09-2.45-5.55zM12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg>Video Editing</li>
+                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21.73 18.27l-5.3-5.3-2.5-2.5-5.3-5.3c-.59-.59-1.54-.59-2.12 0L2.27 9.41c-.59.59-.59 1.54 0 2.12l5.3 5.3 2.5 2.5 5.3 5.3c.59.59 1.54.59 2.12 0l4.24-4.24c.58-.59.58-1.54 0-2.13zM9.41 12L4.12 6.71l1.41-1.41L12 11.76l6.47-6.47 1.41 1.41L14.12 12l-4.71-4.71z"/></svg>Adobe Illustrator</li>
                     </ul>
                 </div>
                 <div class="skill-category">
                     <h3>Certifications</h3>
                     <ul>
-                        <li>Cisco Intro to Cybersecurity</li>
-                        <li>Cisco Endpoint Security</li>
-                        <li>Cisco Networking Basics</li>
-                        <li>AWS Cloud Practitioner</li>
-                        <li>Google SecOps & SIEM</li>
+                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.22-1.05-.59-1.42zM13 20.01L4 11.01V4h7v.01l9 9-7 7z"/><circle cx="6.5" cy="6.5" r="1.5"/></svg>Cisco Intro to Cybersecurity</li>
+                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.22-1.05-.59-1.42zM13 20.01L4 11.01V4h7v.01l9 9-7 7z"/><circle cx="6.5" cy="6.5" r="1.5"/></svg>Cisco Endpoint Security</li>
+                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.22-1.05-.59-1.42zM13 20.01L4 11.01V4h7v.01l9 9-7 7z"/><circle cx="6.5" cy="6.5" r="1.5"/></svg>Cisco Networking Basics</li>
+                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.22-1.05-.59-1.42zM13 20.01L4 11.01V4h7v.01l9 9-7 7z"/><circle cx="6.5" cy="6.5" r="1.5"/></svg>AWS Cloud Practitioner</li>
+                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.22-1.05-.59-1.42zM13 20.01L4 11.01V4h7v.01l9 9-7 7z"/><circle cx="6.5" cy="6.5" r="1.5"/></svg>Google SecOps & SIEM</li>
                     </ul>
                 </div>
             </div>
@@ -600,7 +664,12 @@
         
         <!-- About Section -->
         <section id="about" class="container">
-            <div class="about-content">
+            <center><div class="about-image">
+                <!-- Replace this placeholder with your actual photo. E.g., <img src="your-photo.jpg" ...> -->
+                <img src="CV.jpg" alt="A photo of Chandika Nawodya Senarathna"
+                onerror="this.onerror=null; this.src='https://placehold.co/300x300/0D0D0D/CCCCCC?text=Image+Not+Found';">
+            </div></center>
+            <center><div class="about-content">
                 <h2>About Me</h2>
                 <p>
                     I am a passionate and detail-oriented professional bridging the gap between cybersecurity and creative design. My journey into tech began with a curiosity for how things work, which quickly evolved into a deep dive into network security and digital forensics. 
@@ -610,12 +679,7 @@
                 </p>
                 <p><strong>Major Achievement:</strong> Ranked 109th out of 8,129 teams in the Cyber Apocalypse CTF 2025 by Hack The Box.</p>
                 <a href="Chandika-Nawodya-Senarathna-CV.pdf" download class="btn" style="margin-top: 20px;">Download CV</a>
-            </div>
-            <div class="about-image">
-                <!-- Replace this placeholder with your actual photo. E.g., <img src="your-photo.jpg" ...> -->
-                <img src="CV.jpg" alt="A photo of Chandika Nawodya Senarathna"
-                onerror="this.onerror=null; this.src='https://placehold.co/300x300/0D0D0D/CCCCCC?text=Image+Not+Found';">
-            </div>
+            </div></center>
         </section>
         
         <!-- Contact Section -->
@@ -650,52 +714,223 @@
     </footer>
 
     <script>
-        // --- Interactive Terminal Animation ---
-        document.addEventListener('DOMContentLoaded', function() {
-            new Typed('#terminal-text', {
-                strings: [
-                    "<span class='prompt'>[user@CNS ~]$</span> ./greet_visitor.sh^1000\nInitializing connection...^500\nConnection established.^500\nWelcome. I am Chandika Nawodya Senarathna.\n> Cybersecurity Student\n> Graphic Designer\n<span class='prompt'>[user@CNS ~]$</span> ^500"
-                ],
-                typeSpeed: 40,
-                backSpeed: 20,
-                loop: false,
-                contentType: 'html',
-                showCursor: true,
-                cursorChar: '█',
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Interactive Terminal Logic ---
+            const terminalBody = document.getElementById('terminal-body');
+            let commandHistory = [];
+            let historyIndex = -1;
+
+            const welcomeMessage = [
+                "Initializing connection...",
+                "Connection established.",
+                "Welcome. I am Chandika Nawodya Senarathna.",
+                "> Cybersecurity Undergraduate",
+                "> Security Researcher",
+                "> Graphic Designer",
+                "> Video Editor",
+                "\nType 'help' for a list of available commands."
+            ];
+
+            function typeWriter(element, text, speed, callback) {
+                let i = 0;
+                function type() {
+                    if (i < text.length) {
+                        element.innerHTML += text.charAt(i);
+                        i++;
+                        terminalBody.scrollTop = terminalBody.scrollHeight;
+                        setTimeout(type, speed);
+                    } else if (callback) {
+                        callback();
+                    }
+                }
+                type();
+            }
+
+            function initTerminal() {
+                let i = 0;
+                function showWelcomeMessage() {
+                    if (i < welcomeMessage.length) {
+                        const output = document.createElement('div');
+                        output.classList.add('terminal-output');
+                        terminalBody.appendChild(output);
+                        typeWriter(output, welcomeMessage[i], 30, showWelcomeMessage);
+                        i++;
+                    } else {
+                        createInputLine();
+                    }
+                }
+                showWelcomeMessage();
+            }
+
+            function createInputLine() {
+                const line = document.createElement('div');
+                line.classList.add('terminal-line');
+                line.innerHTML = `<span class="prompt">[user@CNS ~]$</span><input type="text" class="terminal-input" autofocus>`;
+                terminalBody.appendChild(line);
+                
+                const input = line.querySelector('.terminal-input');
+                input.focus();
+                
+                input.addEventListener('keydown', handleCommand);
+                terminalBody.scrollTop = terminalBody.scrollHeight;
+            }
+
+            function handleCommand(e) {
+                if (e.key === 'Enter') {
+                    const input = e.target;
+                    const command = input.value.trim().toLowerCase();
+                    
+                    if (command) {
+                        commandHistory.unshift(command);
+                        historyIndex = -1;
+                    }
+
+                    const prevLine = input.parentElement;
+                    prevLine.innerHTML = `<span class="prompt">[user@CNS ~]$</span> ${command}`;
+
+                    if (command) {
+                        processCommand(command);
+                    } else {
+                        createInputLine();
+                    }
+                } else if (e.key === 'ArrowUp') {
+                    if (historyIndex < commandHistory.length - 1) {
+                        historyIndex++;
+                        e.target.value = commandHistory[historyIndex];
+                    }
+                } else if (e.key === 'ArrowDown') {
+                    if (historyIndex > 0) {
+                        historyIndex--;
+                        e.target.value = commandHistory[historyIndex];
+                    } else {
+                        historyIndex = -1;
+                        e.target.value = "";
+                    }
+                }
+            }
+
+            function processCommand(command) {
+                const output = document.createElement('div');
+                output.classList.add('terminal-output');
+                terminalBody.appendChild(output);
+                
+                let response = '';
+                let action = null;
+
+                switch (command) {
+                    case 'help':
+                        response = `Available commands:\n` +
+                                   `  help      - Shows this list of commands\n` +
+                                   `  projects  - Scrolls to the projects section\n` +
+                                   `  contact   - Scrolls to the contact section\n` +
+                                   `  skills    - Scrolls to the skills section\n` +
+                                   `  about     - Scrolls to the about section\n` +
+                                   `  clear     - Clears the terminal screen`;
+                        break;
+                    case 'projects':
+                    case 'skills':
+                    case 'about':
+                    case 'contact':
+                        response = `Executing... scrolling to ${command} section.`;
+                        action = () => {
+                            const targetSection = document.getElementById(command);
+                            if (targetSection) {
+                                const headerOffset = 80; // Height of the fixed header
+                                const elementPosition = targetSection.getBoundingClientRect().top;
+                                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                              
+                                window.scrollTo({
+                                     top: offsetPosition,
+                                     behavior: "smooth"
+                                });
+                            }
+                        };
+                        break;
+                    case 'clear':
+                        terminalBody.innerHTML = '';
+                        initTerminal();
+                        return;
+                    default:
+                        response = `bash: command not found: ${command}`;
+                        break;
+                }
+                
+                typeWriter(output, response, 10, () => {
+                    if(action) action();
+                    createInputLine();
+                });
+            }
+
+            terminalBody.addEventListener('click', () => {
+                const input = terminalBody.querySelector('.terminal-input');
+                if (input) {
+                    input.focus();
+                }
+            });
+
+            initTerminal();
+
+            // --- Fade-in sections on scroll ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('section.container').forEach(section => {
+                observer.observe(section);
+            });
+
+            // --- Mobile Navigation ---
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('nav-active');
+                hamburger.classList.toggle('toggle');
+            });
+
+            // --- Active Nav Link on Scroll ---
+            const sections = document.querySelectorAll('section');
+            const navLi = document.querySelectorAll('nav ul li a');
+
+            window.addEventListener('scroll', ()=> {
+                let current = 'hero';
+                sections.forEach( section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= (sectionTop - 80)) { // 80 is header height
+                        current = section.getAttribute('id');
+                    }
+                })
+
+                navLi.forEach( a => {
+                    a.classList.remove('active');
+                    if (a.getAttribute('href').includes(current)) {
+                        a.classList.add('active');
+                    }
+                })
+            });
+
+            // --- Project Filtering ---
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const projectCards = document.querySelectorAll('.project-card');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const filter = button.getAttribute('data-filter');
+                    
+                    projectCards.forEach(card => {
+                        if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                            card.classList.remove('hidden');
+                        } else {
+                            card.classList.add('hidden');
+                        }
+                    });
+                });
             });
         });
-
-        // --- Mobile Navigation ---
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
-
-        hamburger.addEventListener('click', () => {
-            navLinks.classList.toggle('nav-active');
-            hamburger.classList.toggle('toggle');
-        });
-
-        // --- Active Nav Link on Scroll ---
-        const sections = document.querySelectorAll('section');
-        const navLi = document.querySelectorAll('nav ul li a');
-
-        window.addEventListener('scroll', ()=> {
-            let current = '';
-            sections.forEach( section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
-                    current = section.getAttribute('id');
-                }
-            })
-
-            navLi.forEach( a => {
-                a.classList.remove('active');
-                if (a.getAttribute('href').includes(current)) {
-                    a.classList.add('active');
-                }
-            })
-        });
-
     </script>
 </body>
 </html>
