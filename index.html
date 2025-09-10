@@ -1,936 +1,361 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chandika Nawodya Senarathna - Cybersecurity Student & Graphic Designer</title>
-    
-    <!-- Google Fonts -->
+    <title>Chandika Nawodya Senarathna | Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
-        /* ------------------- */
-        /* --- Root & Globals --- */
-        /* ------------------- */
-        :root {
-            --background-color: #0D0D0D;
-            --primary-green: #00FF41;
-            --accent-red: #FF0033;
-            --text-light: #CCCCCC;
-            --text-dark: #1a1a1a;
-            --border-color: rgba(0, 255, 65, 0.2);
-            --card-bg: #1a1a1a;
-            
-            --font-mono: 'Fira Code', monospace;
-            --font-sans: 'Inter', sans-serif;
-            
-            --glow-shadow-green: 0 0 5px var(--primary-green), 0 0 10px var(--primary-green), 0 0 15px var(--primary-green);
-            --glow-shadow-red: 0 0 5px var(--accent-red), 0 0 10px var(--accent-red);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
-            background-color: var(--background-color);
-            color: var(--text-light);
-            font-family: var(--font-sans);
-            /* Animated Scan Lines */
-            background-image: repeating-linear-gradient(
-                0deg, 
-                rgba(0, 255, 65, 0.05), 
-                rgba(0, 255, 65, 0.05) 1px, 
-                transparent 1px, 
-                transparent 3px
-            );
-            animation: scanline 20s linear infinite;
-            overflow-x: hidden;
+            font-family: 'Fira Code', monospace;
+            background-color: #0a0a0a;
+            color: #e0e0e0;
         }
-        
-        @keyframes scanline {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 100vh; }
+        .text-red-accent { color: #ff3c3c; }
+        .bg-red-accent { background-color: #ff3c3c; }
+        .border-red-accent { border-color: #ff3c3c; }
+        .shadow-glow { box-shadow: 0 0 15px rgba(255, 60, 60, 0.4); }
+
+        /* Terminal styling */
+        .terminal {
+            background-color: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid #333;
+        }
+        .terminal-header {
+            background-color: #1e1e1e;
+            border-bottom: 1px solid #333;
+        }
+        .terminal-input::after {
+            content: '█';
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
         }
 
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 80px 0;
+        /* Typing animation */
+        .typed-cursor {
+            opacity: 1;
+            animation: blink 0.7s infinite;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ff3c3c;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #e02f2f;
+        }
+
+        /* Reveal on scroll */
+        .reveal {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(30px);
             transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
-        
-        .container.visible {
+        .reveal.visible {
             opacity: 1;
             transform: translateY(0);
         }
-
-        h1, h2, h3 {
-            font-family: var(--font-mono);
-            color: var(--primary-green);
-            text-shadow: 0 0 5px rgba(0, 255, 65, 0.7);
-        }
-
-        h2 {
-            font-size: 2.5rem;
-            text-align: center;
-            margin-bottom: 50px;
-            text-transform: uppercase;
-        }
-
-        /* ------------------- */
-        /* --- Header & Nav --- */
-        /* ------------------- */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-            background-color: rgba(13, 13, 13, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-family: var(--font-mono);
-            font-size: 1.2rem;
-            color: var(--primary-green);
-            text-decoration: none;
-            font-weight: 700;
-        }
-
-        .logo svg {
-            width: 40px;
-            height: 40px;
-            transition: transform 0.3s ease;
-        }
-        .logo:hover svg {
-            transform: rotate(-10deg);
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 30px;
-        }
-
-        nav a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-family: var(--font-mono);
-            font-size: 1rem;
-            transition: color 0.3s, text-shadow 0.3s;
-            position: relative;
-        }
-
-        nav a:hover, nav a.active {
-            color: var(--primary-green);
-            text-shadow: var(--glow-shadow-green);
-        }
-        
-        .hamburger {
-            display: none;
-            cursor: pointer;
-        }
-        
-        .hamburger div {
-            width: 25px;
-            height: 3px;
-            background-color: var(--primary-green);
-            margin: 5px;
-            transition: all 0.3s ease;
-        }
-
-        /* ------------------- */
-        /* --- Hero Terminal --- */
-        /* ------------------- */
-        #hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding-top: 80px; /* Header offset */
-        }
-
-        .terminal-window {
-            width: 100%;
-            max-width: 800px;
-            height: 500px;
-            background-color: rgba(26, 26, 26, 0.9);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            box-shadow: 0 0 25px rgba(0, 255, 65, 0.1);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .terminal-header {
-            background-color: #333;
-            padding: 10px;
-            border-top-left-radius: 7px;
-            border-top-right-radius: 7px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .terminal-button {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-        .red { background-color: #ff5f56; }
-        .yellow { background-color: #ffbd2e; }
-        .green { background-color: #27c93f; }
-
-        .terminal-body {
-            padding: 20px;
-            font-family: var(--font-mono);
-            font-size: 1.1rem;
-            color: var(--primary-green);
-            flex-grow: 1;
-            overflow-y: auto;
-            cursor: text;
-        }
-        
-        .terminal-body .prompt {
-            color: var(--text-light);
-        }
-
-        .terminal-line {
-            display: flex;
-        }
-
-        .terminal-input {
-            background: transparent;
-            border: none;
-            color: var(--primary-green);
-            font-family: var(--font-mono);
-            font-size: 1.1rem;
-            flex-grow: 1;
-            caret-color: var(--primary-green);
-        }
-        
-        .terminal-input:focus {
-            outline: none;
-        }
-        
-        .cursor {
-            width: 10px;
-            height: 1.2em;
-            background: var(--primary-green);
-            display: inline-block;
-            animation: typed-blink 0.7s infinite;
-            vertical-align: middle;
-        }
-
-        @keyframes typed-blink {
-            50% { opacity: 0.0; }
-        }
-
-        .terminal-output {
-            white-space: pre-wrap;
-            line-height: 1.5;
-            margin-bottom: 10px;
-        }
-        
-        /* ------------------- */
-        /* --- Projects Section --- */
-        /* ------------------- */
-        .project-filters {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .filter-btn {
-            margin: 0 10px;
-            padding: 10px 20px;
-            font-size: 1rem;
-        }
-
-        .project-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-        }
-
-        .project-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 25px;
-            transition: transform 0.3s, box-shadow 0.3s, opacity 0.5s;
-            overflow: hidden;
-        }
-
-        .project-card.hidden {
-            transform: scale(0.9);
-            opacity: 0;
-            display: none;
-        }
-
-        .project-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
-        }
-
-        .project-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-        
-        .project-card p {
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-        
-        .project-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: auto;
-        }
-        
-        .project-tags span {
-            background-color: var(--background-color);
-            color: var(--primary-green);
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-            border: 1px solid var(--border-color);
-        }
-
-        /* ------------------- */
-        /* --- Skills Section --- */
-        /* ------------------- */
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            text-align: center;
-        }
-        
-        .skill-category {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 30px 20px;
-        }
-        
-        .skill-category h3 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-        }
-        
-        .skill-category ul {
-            list-style: none;
-        }
-        
-        .skill-category li {
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-        }
-        .skill-category li svg {
-            width: 20px;
-            height: 20px;
-            fill: var(--primary-green);
-            margin-right: 10px;
-        }
-
-
-        /* ------------------- */
-        /* --- About Section --- */
-        /* ------------------- */
-        #about .container {
-            display: flex;
-            flex-direction: column; /* Stack image and text vertically */
-            align-items: center;   /* Center items horizontally */
-            text-align: center;    /* Center the text within its container */
-            gap: 30px;
-        }
-        
-        .about-content {
-            max-width: 800px; /* Constrain text width for better readability */
-        }
-
-        .about-content p {
-            line-height: 1.7;
-            margin-bottom: 15px;
-        }
-        
-        .about-image {
-            max-width: 250px; /* Control the max size of the image */
-            margin-bottom: 20px; /* Add space between image and text */
-        }
-        
-        .about-image img {
-            width: 100%;
-            height: auto;
-            border-radius: 50%; /* Makes the image circular */
-            border: 3px solid var(--primary-green);
-            box-shadow: var(--glow-shadow-green);
-        }
-
-        /* ------------------- */
-        /* --- Contact Section --- */
-        /* ------------------- */
-        #contact-form {
-            max-width: 700px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        #contact-form input, #contact-form textarea {
-            width: 100%;
-            padding: 15px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            color: var(--text-light);
-            font-family: var(--font-sans);
-            font-size: 1rem;
-        }
-        
-        #contact-form input:focus, #contact-form textarea:focus {
-            outline: none;
-            box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
-        }
-        
-        .btn {
-            padding: 15px 30px;
-            background: transparent;
-            border: 2px solid var(--primary-green);
-            color: var(--primary-green);
-            font-family: var(--font-mono);
-            font-size: 1rem;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: background-color 0.3s, box-shadow 0.3s;
-            align-self: center; /* Center buttons in flex containers */
-            text-decoration: none; /* For <a> tags styled as buttons */
-            display: inline-block; /* For <a> tags */
-            text-align: center;
-        }
-        
-        .btn:hover {
-            background-color: var(--primary-green);
-            color: var(--text-dark);
-            box-shadow: var(--glow-shadow-green);
-        }
-        
-        .btn.danger {
-             border-color: var(--accent-red);
-             color: var(--accent-red);
-        }
-        
-        .btn.danger:hover {
-            background-color: var(--accent-red);
-            color: var(--text-dark);
-            box-shadow: var(--glow-shadow-red);
-        }
-
-        /* ------------------- */
-        /* --- Footer --- */
-        /* ------------------- */
-        footer {
-            text-align: center;
-            padding: 30px;
-            border-top: 1px solid var(--border-color);
-            font-family: var(--font-mono);
-        }
-        
-        .social-links {
-            margin-bottom: 20px;
-        }
-
-        .social-links a {
-            color: var(--text-light);
-            margin: 0 15px;
-            font-size: 1.5rem;
-            transition: color 0.3s, text-shadow 0.3s;
-            display: inline-block;
-        }
-        
-        .social-links a:hover {
-            color: var(--primary-green);
-            text-shadow: 0 0 5px var(--primary-green);
-        }
-
-        .social-links a svg {
-            width: 28px;
-            height: 28px;
-            fill: currentColor;
-            vertical-align: middle;
-        }
-        
-        footer p {
-            margin-top: 20px;
-            font-size: 0.9rem;
-        }
-
-        /* ------------------- */
-        /* --- Responsive Design --- */
-        /* ------------------- */
-        @media (max-width: 768px) {
-            h2 { font-size: 2rem; }
-            
-            nav ul {
-                position: fixed;
-                top: 71px; /* Header height */
-                right: -100%;
-                width: 100%;
-                height: calc(100vh - 71px);
-                background-color: var(--background-color);
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                gap: 50px;
-                transition: right 0.5s ease-in-out;
-            }
-            
-            nav ul.nav-active {
-                right: 0;
-            }
-            
-            .hamburger {
-                display: block;
-            }
-            
-            .toggle .line1 {
-                transform: rotate(-45deg) translate(-5px, 6px);
-            }
-            .toggle .line2 {
-                opacity: 0;
-            }
-            .toggle .line3 {
-                transform: rotate(45deg) translate(-5px, -6px);
-            }
-            
-            .about-image {
-                max-width: 200px;
-            }
-        }
     </style>
 </head>
-<body>
+<body class="overflow-x-hidden">
 
-    <!-- Header -->
-    <header>
-        <a href="#hero" class="logo">
-            <!-- SVG Logo: "The Secure Pen" -->
-            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M50 10C50 10 90 25 90 50V80C90 80 70 90 50 90C30 90 10 80 10 80V50C10 25 50 10 50 10Z" stroke="#00FF41" stroke-width="5"/>
-                <path d="M40 50L50 30L60 50L50 70L40 50Z" fill="#00FF41"/>
-                <path d="M50 30V15C50 15 48 10 50 5C52 10 50 15 50 15Z" stroke="#00FF41" stroke-width="3"/>
-            </svg>
-            <span>Chandika Nawodya Senarathna</span>
-        </a>
-        <nav>
-            <ul class="nav-links">
-                <li><a href="#hero" class="active">Home</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-        <div class="hamburger">
-            <div class="line1"></div>
-            <div class="line2"></div>
-            <div class="line3"></div>
+    <!-- Header / Hero Section -->
+    <header id="home" class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+        <!-- Background Grid -->
+        <div class="absolute inset-0 z-0 opacity-10" style="background-image: linear-gradient(#ff3c3c 1px, transparent 1px), linear-gradient(to right, #ff3c3c 1px, transparent 1px); background-size: 2rem 2rem;"></div>
+        <div class="absolute inset-0 bg-black/80 z-0"></div>
+
+        <div class="text-center z-10 grid md:grid-cols-3 gap-8 items-center max-w-6xl mx-auto">
+            <div class="md:col-span-2 text-left">
+                <h1 class="text-4xl md:text-6xl font-bold mb-2">Chandika Nawodya Senarathna</h1>
+                <p class="text-xl md:text-2xl text-red-accent mb-4 font-semibold">// cr4z3sku11</p>
+                <p class="text-lg md:text-xl h-8">
+                    I am a <span id="typed-text" class="text-red-accent font-bold"></span><span class="typed-cursor">|</span>
+                </p>
+                <p class="mt-6 max-w-2xl text-gray-300">
+                    A multi-skilled professional merging IT Support, Cybersecurity, and Graphic Design. Welcome to my digital domain.
+                </p>
+                <div class="mt-8 flex gap-4 justify-start">
+                    <a href="#projects" class="bg-red-accent text-white py-2 px-6 rounded-lg font-bold hover:bg-opacity-80 transition-all">View Projects</a>
+                    <a href="#contact" class="border-2 border-red-accent text-white py-2 px-6 rounded-lg font-bold hover:bg-red-accent transition-all">Contact Me</a>
+                </div>
+            </div>
+            <div class="flex justify-center">
+                 <!-- TODO: Replace this placeholder with your professional image URL -->
+                <img src="CV.jpg" alt="Chandika Nawodya Senarathna" class="w-64 h-64 md:w-80 md:h-80 rounded-full object-cover border-4 border-red-accent shadow-glow">
+            </div>
         </div>
     </header>
 
-    <main>
-        <!-- Hero Section -->
-        <section id="hero">
-            <div class="terminal-window">
-                <div class="terminal-header">
-                    <div class="terminal-button red"></div>
-                    <div class="terminal-button yellow"></div>
-                    <div class="terminal-button green"></div>
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-24">
+
+        <!-- Interactive Terminal -->
+        <section class="reveal">
+            <div id="terminal" class="terminal rounded-lg shadow-2xl shadow-red-900/20 max-w-4xl mx-auto">
+                <div class="terminal-header p-2 flex items-center">
+                    <div class="flex space-x-2">
+                        <span class="w-3 h-3 bg-red-500 rounded-full"></span>
+                        <span class="w-3 h-3 bg-yellow-500 rounded-full"></span>
+                        <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                    </div>
+                    <p class="flex-1 text-center text-sm text-gray-400">bash -- portfolio_nav</p>
                 </div>
-                <div class="terminal-body" id="terminal-body">
-                    <!-- Interactive terminal content is generated here by JavaScript -->
+                <div id="terminal-body" class="p-4 h-64 overflow-y-auto font-mono text-sm">
+                    <div>Welcome to my interactive terminal.</div>
+                    <div>Type <span class="text-red-accent">'help'</span> to see available commands.</div>
+                    <div class="mt-2 flex">
+                        <span class="text-green-400">user@cr4z3sku11:~$</span>
+                        <input type="text" id="terminal-input" class="terminal-input bg-transparent border-none text-white focus:outline-none flex-1 ml-2" autofocus>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Projects Section -->
-        <section id="projects" class="container">
-            <h2>Projects</h2>
-            <div class="project-filters">
-                <button class="btn filter-btn" data-filter="all">All</button>
-                <button class="btn filter-btn" data-filter="cybersecurity">Cybersecurity</button>
-                <button class="btn filter-btn" data-filter="design">Graphic Design & Video Editing</button>
-            </div>
-            <div class="project-grid">
-                <!-- Project 1: SOC Lab -->
-                <div class="project-card" data-category="cybersecurity">
-                    <h3>Home SOC Lab with Wazuh</h3>
-                    <p>Designed and deployed a fully functional Security Operations Center (SOC) home lab using Wazuh SIEM for real-time threat detection, log analysis, and incident response simulation.</p>
-                    <div class="project-tags">
-                        <span>Wazuh</span>
-                        <span>SIEM</span>
-                        <span>Network Security</span>
-                        <span>Virtualization</span>
-                        <span>Ubuntu Server</span>
-                        <span>Kali Linux</span>
-                    </div>
-                </div>
-                <!-- Project 2: Keylogger -->
-                <div class="project-card" data-category="cybersecurity">
-                    <h3>Simple Python Keylogger</h3>
-                    <p>Developed a keylogger in Python for educational purposes to understand system-level monitoring, data capture techniques, and fundamental concepts of offensive security tools.</p>
-                    <div class="project-tags">
-                        <span>Python</span>
-                        <span>Scripting</span>
-                        <span>Ethical Hacking</span>
-                        <span>Security Research</span>
-                    </div>
-                </div>
-                <!-- Project 3: Graphic Design -->
-                <div class="project-card" data-category="design">
-                    <h3>Graphic Designing & Video Editing</h3>
-                    <p>Conceptualized and executed a complete brand identity for a client, including logo design, color theory, typography, and marketing collateral to create a cohesive and impactful brand presence.</p>
-                    <div class="project-tags">
-                        <span>Adobe Photoshop</span>
-                        <span>Logo Design</span>
-                        <span>Adobe Illustrator</span>
-                        <span>Davinci Resolve</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Skills Section -->
-        <section id="skills" class="container">
-            <h2>Skills & Certifications</h2>
-            <div class="skills-grid">
-                <div class="skill-category">
-                    <h3>Cybersecurity</h3>
-                    <ul>
-                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 1.043l-9.373 4.477v6.234c0 5.485 3.981 10.27 9.373 11.203 5.392-.933 9.373-5.718 9.373-11.203V5.52L12 1.043zm0 2.115l7.627 3.64-6.254 2.983L5.746 6.78l6.254-2.982zM3.75 7.31l7.5 3.578v9.963c-4.47-1.02-7.5-4.86-7.5-9.673V7.31zm8.999 13.541V10.888l7.5-3.578v6.423c0 4.813-3.03 8.653-7.5 9.673z"/></svg>Network Security</li>
-                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>Security Analysis</li>
-                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.5 6.5c-2.76 0-5 2.24-5 5s2.24 5 5 5a5.002 5.002 0 005-5c0-2.76-2.24-5-5-5zm0 8c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3zm-.001-13C5.148 1.5.001 6.648.001 13S5.148 24.5 11.499 24.5 23 19.352 23 13 17.852 1.5 11.499 1.5zm0 21C6.262 22.5 2 18.238 2 13S6.262 3.5 11.5 3.5 21 7.762 21 13s-4.262 9.5-9.5 9.5z"/></svg>Digital Forensics</li>
-                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 21.5c.83 0 1.5-.67 1.5-1.5v-8c0-.83-.67-1.5-1.5-1.5S7.5 11.17 7.5 12v8c0 .83.67 1.5 1.5 1.5zm4.5-1.5v-5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5zm3-3v-2c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v2c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5zM22 6H12l-2-4H2C.9 2 0 2.9 0 4v16c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"/></svg>SIEM (Wazuh)</li>
-                    </ul>
-                </div>
-                <div class="skill-category">
-                    <h3>Graphic Design</h3>
-                    <ul>
-                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>Adobe Photoshop</li>
-                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-12H9v2h2v2H9v2h2v2H9v2h4v-2h2v-2h-2v-2h2v-2h-2V8h-2z"/></svg>Logo Design</li>
-                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.05 4.95C17.59 3.49 15.65 2.5 13.5 2.5s-4.09.99-5.55 2.45C6.49 6.41 5.5 8.35 5.5 10.5S6.49 14.59 7.95 16.05c1.46 1.46 3.4 2.45 5.55 2.45s4.09-.99 5.55-2.45c1.46-1.46 2.45-3.4 2.45-5.55s-.99-4.09-2.45-5.55zM12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg>Video Editing</li>
-                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21.73 18.27l-5.3-5.3-2.5-2.5-5.3-5.3c-.59-.59-1.54-.59-2.12 0L2.27 9.41c-.59.59-.59 1.54 0 2.12l5.3 5.3 2.5 2.5 5.3 5.3c.59.59 1.54.59 2.12 0l4.24-4.24c.58-.59.58-1.54 0-2.13zM9.41 12L4.12 6.71l1.41-1.41L12 11.76l6.47-6.47 1.41 1.41L14.12 12l-4.71-4.71z"/></svg>Adobe Illustrator</li>
-                    </ul>
-                </div>
-                <div class="skill-category">
-                    <h3>Certifications</h3>
-                    <ul>
-                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.22-1.05-.59-1.42zM13 20.01L4 11.01V4h7v.01l9 9-7 7z"/><circle cx="6.5" cy="6.5" r="1.5"/></svg>Cisco Intro to Cybersecurity</li>
-                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.22-1.05-.59-1.42zM13 20.01L4 11.01V4h7v.01l9 9-7 7z"/><circle cx="6.5" cy="6.5" r="1.5"/></svg>Cisco Endpoint Security</li>
-                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.22-1.05-.59-1.42zM13 20.01L4 11.01V4h7v.01l9 9-7 7z"/><circle cx="6.5" cy="6.5" r="1.5"/></svg>Cisco Networking Basics</li>
-                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.22-1.05-.59-1.42zM13 20.01L4 11.01V4h7v.01l9 9-7 7z"/><circle cx="6.5" cy="6.5" r="1.5"/></svg>AWS Cloud Practitioner</li>
-                        <li><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.22-1.05-.59-1.42zM13 20.01L4 11.01V4h7v.01l9 9-7 7z"/><circle cx="6.5" cy="6.5" r="1.5"/></svg>Google SecOps & SIEM</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-        
-        <!-- About Section -->
-        <section id="about" class="container">
-            <center><div class="about-image">
-                <!-- Replace this placeholder with your actual photo. E.g., <img src="your-photo.jpg" ...> -->
-                <img src="CV.jpg" alt="A photo of Chandika Nawodya Senarathna"
-                onerror="this.onerror=null; this.src='https://placehold.co/300x300/0D0D0D/CCCCCC?text=Image+Not+Found';">
-            </div></center>
-            <center><div class="about-content">
-                <h2>About Me</h2>
-                <p>
-                    I am a passionate and detail-oriented professional bridging the gap between cybersecurity and creative design. My journey into tech began with a curiosity for how things work, which quickly evolved into a deep dive into network security and digital forensics. 
+        <!-- About Me -->
+        <section id="about" class="reveal">
+            <h2 class="text-3xl font-bold text-center mb-12"><span class="text-red-accent">01.</span> About Me</h2>
+            <div class="text-center max-w-3xl mx-auto text-gray-300 leading-relaxed">
+                <p class="mb-4">
+                    A versatile and dedicated IT professional bridging the gap between robust technical support, cutting-edge cybersecurity, and compelling graphic design. As a top-ranked learner on TryHackMe, I bring an analytical, security-first mindset to every challenge, from architecting home lab environments with Active Directory to hunting down vulnerabilities in CTF competitions.
                 </p>
                 <p>
-                    Simultaneously, I've cultivated a strong eye for aesthetics and branding, allowing me to not only secure digital environments but also to communicate complex ideas through compelling visual design. My goal is to leverage this unique dual-skillset in roles like IT Support, SOC Analyst, or Network Administration, where both technical acumen and clear communication are paramount.
+                    This technical acumen is paired with a creative passion for design, allowing me to not only solve complex problems but also to communicate solutions with clarity and visual impact. I thrive on troubleshooting, securing digital landscapes, and creating intuitive, engaging user experiences.
                 </p>
-                <p><strong>Major Achievement:</strong> Ranked 109th out of 8,129 teams in the Cyber Apocalypse CTF 2025 by Hack The Box.</p>
-                <a href="Chandika-Nawodya-Senarathna-CV.pdf" download class="btn" style="margin-top: 20px;">Download CV</a>
-            </div></center>
+            </div>
         </section>
-        
-        <!-- Contact Section -->
-        <section id="contact" class="container">
-            <h2>Get In Touch</h2>
-            <!-- IMPORTANT: Replace 'YOUR_EMAIL_HERE' with your Formspree endpoint -->
-            <form id="contact-form" action="https://formspree.io/f/xgvzwkba" method="POST">
-                <input type="text" name="name" placeholder="Name" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <textarea name="message" rows="7" placeholder="Message" required></textarea>
-                <button type="submit" class="btn">Send Message</button>
-            </form>
+
+        <!-- Skills -->
+        <section id="skills" class="reveal">
+            <h2 class="text-3xl font-bold text-center mb-12"><span class="text-red-accent">02.</span> My Skillset</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- IT Support -->
+                <div class="bg-[#1a1a1a] p-6 rounded-lg border border-gray-800 hover:border-red-accent hover:shadow-glow transition-all">
+                    <h3 class="text-xl font-bold text-red-accent mb-4"><i class="fas fa-headset mr-2"></i>IT Support</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>Windows 10/11 & Server</li>
+                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>Software/Hardware Troubleshooting</li>
+                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>Microsoft 365 & ServiceNow</li>
+                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>Technical Documentation</li>
+                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>User & System Administration</li>
+                    </ul>
+                </div>
+                <!-- Cybersecurity -->
+                <div class="bg-[#1a1a1a] p-6 rounded-lg border border-gray-800 hover:border-red-accent hover:shadow-glow transition-all">
+                    <h3 class="text-xl font-bold text-red-accent mb-4"><i class="fas fa-shield-halved mr-2"></i>Cybersecurity</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>Active Directory & GPO</li>
+                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>Network & Endpoint Security</li>
+                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>Vulnerability Assessment</li>
+                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>Penetration Testing (CTFs)</li>
+                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>Security Information & Event Management (SIEM)</li>
+                    </ul>
+                </div>
+                <!-- Graphic Design -->
+                <div class="bg-[#1a1a1a] p-6 rounded-lg border border-gray-800 hover:border-red-accent hover:shadow-glow transition-all">
+                    <h3 class="text-xl font-bold text-red-accent mb-4"><i class="fas fa-palette mr-2"></i>Graphic Design</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>Adobe Photoshop & Illustrator</li>
+                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>UI/UX Design Principles</li>
+                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>Brand Identity & Logo Design</li>
+                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>Visual Communication</li>
+                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>Digital Art & Illustration</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects -->
+        <section id="projects" class="reveal">
+            <h2 class="text-3xl font-bold text-center mb-12"><span class="text-red-accent">03.</span> Projects & Work</h2>
+            
+            <h3 class="text-2xl font-bold text-center text-gray-300 mb-8">IT & Cybersecurity</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                 <!-- Project 1 -->
+                <div class="bg-[#1a1a1a] rounded-lg overflow-hidden border border-gray-800 group">
+                    <img src="https://placehold.co/600x400/0a0a0a/ff3c3c?text=Home+Lab+Setup" alt="IT Administration Home Lab" class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300">
+                    <div class="p-6">
+                        <span class="text-xs font-bold uppercase text-red-accent">IT Support / SysAdmin</span>
+                        <h4 class="text-xl font-bold mt-2 mb-2 text-white">IT Administration Home Lab</h4>
+                        <p class="text-gray-400">A self-initiated project to build and manage a complete IT infrastructure using Windows Server, VMware, Active Directory, and Office 365 for user management, deployment, and troubleshooting.</p>
+                    </div>
+                </div>
+                 <!-- Project 2 -->
+                <div class="bg-[#1a1a1a] rounded-lg overflow-hidden border border-gray-800 group">
+                    <img src="https://placehold.co/600x400/0a0a0a/ff3c3c?text=CTF+Challenge" alt="CTF Competitions" class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300">
+                    <div class="p-6">
+                        <span class="text-xs font-bold uppercase text-red-accent">Cybersecurity</span>
+                        <h4 class="text-xl font-bold mt-2 mb-2 text-white">Capture The Flag (CTF) Competitions</h4>
+                        <p class="text-gray-400">Actively participate in CTF events like Hack The Box, achieving top rankings and demonstrating practical offensive and defensive security skills in high-pressure environments.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-center text-gray-300 mb-8">Graphic Design Gallery</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                 <!-- TODO: Replace these placeholders with your design sample images and links -->
+                 <a href="#" class="block group"><img src="https://placehold.co/600x400/0a0a0a/ff3c3c?text=Design+Sample+1" class="rounded-lg object-cover w-full h-full group-hover:opacity-75 transition-opacity" alt="Design Sample 1"></a>
+                 <a href="#" class="block group"><img src="https://placehold.co/600x400/0a0a0a/ff3c3c?text=Design+Sample+2" class="rounded-lg object-cover w-full h-full group-hover:opacity-75 transition-opacity" alt="Design Sample 2"></a>
+                 <a href="#" class="block group"><img src="https://placehold.co/600x400/0a0a0a/ff3c3c?text=Design+Sample+3" class="rounded-lg object-cover w-full h-full group-hover:opacity-75 transition-opacity" alt="Design Sample 3"></a>
+                 <a href="#" class="block group"><img src="https://placehold.co/600x400/0a0a0a/ff3c3c?text=Design+Sample+4" class="rounded-lg object-cover w-full h-full group-hover:opacity-75 transition-opacity" alt="Design Sample 4"></a>
+                 <a href="#" class="block group"><img src="https://placehold.co/600x400/0a0a0a/ff3c3c?text=Design+Sample+5" class="rounded-lg object-cover w-full h-full group-hover:opacity-75 transition-opacity" alt="Design Sample 5"></a>
+                 <a href="#" class="block group"><img src="https://placehold.co/600x400/0a0a0a/ff3c3c?text=Design+Sample+6" class="rounded-lg object-cover w-full h-full group-hover:opacity-75 transition-opacity" alt="Design Sample 6"></a>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section id="contact" class="reveal">
+            <h2 class="text-3xl font-bold text-center mb-4"><span class="text-red-accent">04.</span> Get In Touch</h2>
+            <p class="text-center max-w-xl mx-auto text-gray-400 mb-12">
+                My inbox is always open. Whether you have a question, a project proposal, or just want to say hi, I'll get back to you!
+            </p>
+            <div class="text-center">
+                 <a href="mailto:chandikanawodya59@gmail.com" class="inline-block bg-red-accent text-white py-3 px-8 rounded-lg font-bold hover:bg-opacity-80 transition-all text-lg">Say Hello</a>
+
+                <div class="mt-12 flex justify-center items-center gap-6">
+                    <a href="https://www.linkedin.com/in/chandika-n-senarathna/" target="_blank" class="text-gray-400 hover:text-red-accent text-2xl transition-colors"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/dragon-balerion" target="_blank" class="text-gray-400 hover:text-red-accent text-2xl transition-colors"><i class="fab fa-github"></i></a>
+                    <a href="https://linktr.ee/chandikanawodya" target="_blank" class="text-gray-400 hover:text-red-accent text-2xl transition-colors"><i class="fas fa-tree"></i></a>
+                </div>
+                
+                 <!-- TODO: Replace the '#' with a direct link to your CV PDF file -->
+                <div class="mt-12">
+                     <a href="Chandika-Nawodya-Senarathna-CV.pdf" download class="border-2 border-red-accent text-white py-3 px-8 rounded-lg font-bold hover:bg-red-accent transition-all">
+                        <i class="fas fa-download mr-2"></i>Download My CV
+                    </a>
+                </div>
+            </div>
         </section>
 
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <div class="social-links">
-            <!-- Replace # with your actual profile links -->
-            <a href="https://www.linkedin.com/in/chandika-n-senarathna/" target="_blank" title="LinkedIn">
-                <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>LinkedIn</title><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
-            </a>
-            <a href="https://github.com/dragon-balerion" target="_blank" title="GitHub">
-                <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-            </a>
-            <a href="https://linktr.ee/chandikanawodya" target="_blank" title="Linktree">
-                <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Linktree</title><path d="M13.79 3.352l-5.584 9.672 5.584 9.672h4.41L12.617 12l5.583-9.648h-4.41zM5.806 3.352l-4.41 7.638 4.41 7.638h4.41L5.806 12l4.41-7.648H5.806z"/></svg>
-            </a>
-        </div>
-        <p>&copy; 2025 Chandika Nawodya Senarathna. All rights reserved.</p>
+    <footer class="text-center py-6 border-t border-gray-800">
+        <p class="text-gray-500">Designed & Built by Chandika Nawodya Senarathna (cr4z3sku11)</p>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- Interactive Terminal Logic ---
-            const terminalBody = document.getElementById('terminal-body');
-            let commandHistory = [];
-            let historyIndex = -1;
+        // --- Typing Animation ---
+        const typedTextSpan = document.getElementById('typed-text');
+        const textArray = ["IT Support Professional", "Cybersecurity Student", "Graphic Designer"];
+        const typingDelay = 100;
+        const erasingDelay = 50;
+        const newTextDelay = 2000; // Delay between current and next text
+        let textArrayIndex = 0;
+        let charIndex = 0;
 
-            const welcomeMessage = [
-                "Initializing connection...",
-                "Connection established.",
-                "Welcome. I am Chandika Nawodya Senarathna.",
-                "> Cybersecurity Undergraduate",
-                "> Security Researcher",
-                "> Graphic Designer",
-                "> Video Editor",
-                "\nType 'help' for a list of available commands."
-            ];
-
-            function typeWriter(element, text, speed, callback) {
-                let i = 0;
-                function type() {
-                    if (i < text.length) {
-                        element.innerHTML += text.charAt(i);
-                        i++;
-                        terminalBody.scrollTop = terminalBody.scrollHeight;
-                        setTimeout(type, speed);
-                    } else if (callback) {
-                        callback();
-                    }
-                }
-                type();
+        function type() {
+            if (charIndex < textArray[textArrayIndex].length) {
+                typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
+                charIndex++;
+                setTimeout(type, typingDelay);
+            } else {
+                setTimeout(erase, newTextDelay);
             }
+        }
 
-            function initTerminal() {
-                let i = 0;
-                function showWelcomeMessage() {
-                    if (i < welcomeMessage.length) {
-                        const output = document.createElement('div');
-                        output.classList.add('terminal-output');
-                        terminalBody.appendChild(output);
-                        typeWriter(output, welcomeMessage[i], 30, showWelcomeMessage);
-                        i++;
-                    } else {
-                        createInputLine();
-                    }
-                }
-                showWelcomeMessage();
+        function erase() {
+            if (charIndex > 0) {
+                typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex - 1);
+                charIndex--;
+                setTimeout(erase, erasingDelay);
+            } else {
+                textArrayIndex++;
+                if (textArrayIndex >= textArray.length) textArrayIndex = 0;
+                setTimeout(type, typingDelay + 1100);
             }
+        }
 
-            function createInputLine() {
-                const line = document.createElement('div');
-                line.classList.add('terminal-line');
-                line.innerHTML = `<span class="prompt">[user@CNS ~]$</span><input type="text" class="terminal-input" autofocus>`;
-                terminalBody.appendChild(line);
-                
-                const input = line.querySelector('.terminal-input');
-                input.focus();
-                
-                input.addEventListener('keydown', handleCommand);
-                terminalBody.scrollTop = terminalBody.scrollHeight;
-            }
+        document.addEventListener("DOMContentLoaded", function() {
+            if (textArray.length) setTimeout(type, newTextDelay + 250);
+        });
 
-            function handleCommand(e) {
-                if (e.key === 'Enter') {
-                    const input = e.target;
-                    const command = input.value.trim().toLowerCase();
-                    
-                    if (command) {
-                        commandHistory.unshift(command);
-                        historyIndex = -1;
-                    }
+        // --- Interactive Terminal ---
+        const terminalInput = document.getElementById('terminal-input');
+        const terminalBody = document.getElementById('terminal-body');
 
-                    const prevLine = input.parentElement;
-                    prevLine.innerHTML = `<span class="prompt">[user@CNS ~]$</span> ${command}`;
-
-                    if (command) {
-                        processCommand(command);
-                    } else {
-                        createInputLine();
-                    }
-                } else if (e.key === 'ArrowUp') {
-                    if (historyIndex < commandHistory.length - 1) {
-                        historyIndex++;
-                        e.target.value = commandHistory[historyIndex];
-                    }
-                } else if (e.key === 'ArrowDown') {
-                    if (historyIndex > 0) {
-                        historyIndex--;
-                        e.target.value = commandHistory[historyIndex];
-                    } else {
-                        historyIndex = -1;
-                        e.target.value = "";
-                    }
-                }
-            }
-
-            function processCommand(command) {
+        terminalInput.addEventListener('keydown', function(event) {
+            if (event.key === "Enter") {
+                const command = terminalInput.value.trim().toLowerCase();
                 const output = document.createElement('div');
-                output.classList.add('terminal-output');
-                terminalBody.appendChild(output);
-                
+                const prompt = `<div class="flex"><span class="text-green-400">user@cr4z3sku11:~$</span><span class="ml-2">${command}</span></div>`;
+
                 let response = '';
-                let action = null;
 
                 switch (command) {
                     case 'help':
-                        response = `Available commands:\n` +
-                                   `  help      - Shows this list of commands\n` +
-                                   `  projects  - Scrolls to the projects section\n` +
-                                   `  contact   - Scrolls to the contact section\n` +
-                                   `  skills    - Scrolls to the skills section\n` +
-                                   `  about     - Scrolls to the about section\n` +
-                                   `  clear     - Clears the terminal screen`;
+                        response = `
+                            <div>Available commands:</div>
+                            <ul class="list-inside list-disc pl-2">
+                                <li><span class="text-red-accent">'about'</span> - Scrolls to the About Me section.</li>
+                                <li><span class="text-red-accent">'skills'</span> - Scrolls to the Skills section.</li>
+                                <li><span class="text-red-accent">'projects'</span> - Scrolls to the Projects section.</li>
+                                <li><span class="text-red-accent">'contact'</span> - Scrolls to the Contact section.</li>
+                                <li><span class="text-red-accent">'download cv'</span> - Initiates CV download.</li>
+                                <li><span class="text-red-accent">'clear'</span> - Clears the terminal.</li>
+                            </ul>
+                        `;
                         break;
-                    case 'projects':
-                    case 'skills':
                     case 'about':
+                    case 'skills':
+                    case 'projects':
                     case 'contact':
-                        response = `Executing... scrolling to ${command} section.`;
-                        action = () => {
-                            const targetSection = document.getElementById(command);
-                            if (targetSection) {
-                                const headerOffset = 80; // Height of the fixed header
-                                const elementPosition = targetSection.getBoundingClientRect().top;
-                                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                              
-                                window.scrollTo({
-                                     top: offsetPosition,
-                                     behavior: "smooth"
-                                });
-                            }
-                        };
+                        response = `Navigating to ${command} section...`;
+                        document.getElementById(command).scrollIntoView({ behavior: 'smooth' });
                         break;
+                    case 'download cv':
+                         response = `Initiating CV download...`;
+                         document.querySelector('a[download]').click();
+                         break;
                     case 'clear':
-                        terminalBody.innerHTML = '';
-                        initTerminal();
-                        return;
-                    default:
-                        response = `bash: command not found: ${command}`;
+                        terminalBody.innerHTML = '<div>Terminal cleared. Type \'help\' for commands.</div>';
                         break;
+                    default:
+                        response = `<div>bash: command not found: ${command}. Type 'help' for a list of commands.</div>`;
                 }
-                
-                typeWriter(output, response, 10, () => {
-                    if(action) action();
-                    createInputLine();
-                });
+
+                if (command !== 'clear') {
+                    output.innerHTML = prompt + response;
+                    terminalInput.parentElement.before(output);
+                }
+
+                terminalInput.value = '';
+                terminalBody.scrollTop = terminalBody.scrollHeight;
             }
-
-            terminalBody.addEventListener('click', () => {
-                const input = terminalBody.querySelector('.terminal-input');
-                if (input) {
-                    input.focus();
+        });
+        
+        // --- Reveal on Scroll ---
+        const revealElements = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Optional: unobserve after revealing
+                    // observer.unobserve(entry.target);
                 }
             });
-
-            initTerminal();
-
-            // --- Fade-in sections on scroll ---
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            document.querySelectorAll('section.container').forEach(section => {
-                observer.observe(section);
-            });
-
-            // --- Mobile Navigation ---
-            const hamburger = document.querySelector('.hamburger');
-            const navLinks = document.querySelector('.nav-links');
-
-            hamburger.addEventListener('click', () => {
-                navLinks.classList.toggle('nav-active');
-                hamburger.classList.toggle('toggle');
-            });
-
-            // --- Active Nav Link on Scroll ---
-            const sections = document.querySelectorAll('section');
-            const navLi = document.querySelectorAll('nav ul li a');
-
-            window.addEventListener('scroll', ()=> {
-                let current = 'hero';
-                sections.forEach( section => {
-                    const sectionTop = section.offsetTop;
-                    if (pageYOffset >= (sectionTop - 80)) { // 80 is header height
-                        current = section.getAttribute('id');
-                    }
-                })
-
-                navLi.forEach( a => {
-                    a.classList.remove('active');
-                    if (a.getAttribute('href').includes(current)) {
-                        a.classList.add('active');
-                    }
-                })
-            });
-
-            // --- Project Filtering ---
-            const filterButtons = document.querySelectorAll('.filter-btn');
-            const projectCards = document.querySelectorAll('.project-card');
-
-            filterButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const filter = button.getAttribute('data-filter');
-                    
-                    projectCards.forEach(card => {
-                        if (filter === 'all' || card.getAttribute('data-category') === filter) {
-                            card.classList.remove('hidden');
-                        } else {
-                            card.classList.add('hidden');
-                        }
-                    });
-                });
-            });
+        }, {
+            threshold: 0.1
         });
+
+        revealElements.forEach(el => {
+            observer.observe(el);
+        });
+
     </script>
 </body>
 </html>
