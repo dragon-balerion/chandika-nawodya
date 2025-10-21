@@ -185,16 +185,6 @@
             </div>
         </section>
 
-        <!-- AI Integration Note -->
-        <section class="reveal">
-            <div class="bg-[#1a1a1a] p-8 rounded-lg border border-gray-800 text-center max-w-3xl mx-auto hover:border-red-accent hover:shadow-glow transition-all">
-                <h3 class="text-xl font-bold text-red-accent mb-4 font-tech"><i class="fas fa-robot mr-2"></i>A Note on AI Integration</h3>
-                <p class="text-gray-300 leading-relaxed">
-                    This portfolio previously included live AI features, such as a project explainer and a career-coach chatbot, powered by the Google Gemini API. While these have been removed to streamline the user experience and ensure stability, this project demonstrates my ability to integrate and interact with large language models (LLMs) in a modern web environment using JavaScript.
-                </p>
-            </div>
-        </section>
-
         <!-- Skills -->
         <section id="skills" class="reveal">
             <h2 class="text-3xl font-bold text-center mb-12 font-tech"><span class="text-red-accent">02.</span> My Skillset</h2>
@@ -374,6 +364,96 @@
             if (textArray.length) setTimeout(type, newTextDelay + 250);
         });
         
+        // --- Gemini API Integration ---
+        const apiKey = "AIzaSyDKW0aqcHUf5L-S50mmMOb-g1RFPxueGz4"; 
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+        async function callGeminiAPI(userPrompt, systemInstruction, useSearch) {
+            if (apiKey === "YOUR_API_KEY_HERE" || !apiKey) {
+                return "API Key Missing: Please add your Gemini API key to the script section of the HTML file.";
+            }
+
+            const payload = {
+                contents: [{ parts: [{ text: userPrompt }] }],
+                safetySettings: [
+                    {
+                        "category": "HARM_CATEGORY_HARASSMENT",
+                        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+                    },
+                    {
+                        "category": "HARM_CATEGORY_HATE_SPEECH",
+                        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+                    },
+                    {
+                        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                        "threshold": "BLOCK_MEDIUM_AND_ABOVE"
+                    },
+                    {
+                        "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+                        "threshold": "BLOCK_ONLY_HIGH" // More lenient for cybersecurity topics
+                    }
+                ]
+            };
+
+            if (systemInstruction) {
+                payload.systemInstruction = { parts: [{ text: systemInstruction }] };
+            }
+
+            if (useSearch) {
+                payload.tools = [{ "google_search": {} }];
+            }
+
+            const maxRetries = 3;
+            let delay = 2000;
+
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.status === 429 || response.status === 503) {
+                        console.warn(`Attempt ${i + 1}: Model is overloaded. Retrying in ${delay / 1000}s...`);
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        delay *= 2;
+                        continue;
+                    }
+
+                    const result = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(`API call failed: ${result?.error?.message || response.status}`);
+                    }
+                    
+                    if (!result.candidates || result.candidates.length === 0) {
+                        if (result.promptFeedback && result.promptFeedback.blockReason) {
+                             throw new Error(`Request was blocked by the AI for: ${result.promptFeedback.blockReason}`);
+                        }
+                         throw new Error("The AI did not return a response.");
+                    }
+
+                    const candidate = result.candidates[0];
+                    
+                    if (candidate.finishReason && candidate.finishReason !== "STOP") {
+                         throw new Error(`The AI stopped generating for: ${candidate.finishReason}`);
+                    }
+
+                    return candidate?.content?.parts?.[0]?.text || "No response text found.";
+                
+                } catch (error) {
+                    console.error(`Attempt ${i + 1} failed:`, error);
+                    if (i === maxRetries - 1) {
+                        return `Error: Could not get a response from the AI after ${maxRetries} attempts. ${error.message}`;
+                    }
+                     await new Promise(resolve => setTimeout(resolve, delay));
+                     delay *= 2;
+                }
+            }
+             return `Error: Could not get a response from the AI after ${maxRetries} attempts.`;
+        }
+        
         // --- Interactive Terminal ---
         const terminalBody = document.getElementById('terminal-body');
 
@@ -401,37 +481,50 @@
             parentDiv.innerHTML = prompt;
 
             const output = document.createElement('div');
-            let response = '';
-            
-            switch (command) {
-                case 'help':
-                    response = `
-                        <div>Available commands:</div>
-                        <ul class="list-inside list-disc pl-2">
-                            <li><span class="text-red-accent">'about'</span>, <span class="text-red-accent">'skills'</span>, <span class="text-red-accent">'projects'</span>, <span class="text-red-accent">'contact'</span> - Scroll to section.</li>
-                            <li><span class="text-red-accent">'download cv'</span> - Initiates CV download.</li>
-                            <li><span class="text-red-accent">'clear'</span> - Clears the terminal.</li>
-                        </ul>
-                    `;
-                    break;
-                case 'about': case 'skills': case 'projects': case 'contact':
-                    response = `Navigating to ${command} section...`;
-                    document.getElementById(command).scrollIntoView({ behavior: 'smooth' });
-                    break;
-                case 'download cv':
-                     response = `Initiating CV download...`;
-                     document.querySelector('a[download]').click();
-                     break;
-                case 'clear':
-                    terminalBody.innerHTML = '';
-                    break;
-                default:
-                    response = `<div>bash: command not found: ${command}. Type 'help' for a list of commands.</div>`;
-            }
 
-            if (response) {
-                output.innerHTML = response;
+            if (command.startsWith('ask ')) {
+                const question = terminalInput.value.substring(4).trim();
+                output.innerHTML = `<div><span class="text-yellow-400">port_AI is thinking...</span></div>`;
                 terminalBody.appendChild(output);
+                terminalBody.scrollTop = terminalBody.scrollHeight;
+
+                const systemPrompt = "You are a helpful and concise AI career coach specializing in cybersecurity, IT, and tech roles. Your name is port_AI. You are integrated into a personal portfolio terminal. Keep your answers brief, professional, and directly address the user's question. Format your answers for a terminal output, using simple text, bullet points (*), and line breaks.";
+                
+                const aiResponse = await callGeminiAPI(question, systemPrompt, true);
+                
+                output.innerHTML = `<div class="text-gray-300 whitespace-pre-wrap">${aiResponse}</div>`;
+            } else {
+                let response = '';
+                switch (command) {
+                    case 'help':
+                        response = `
+                            <div>Available commands:</div>
+                            <ul class="list-inside list-disc pl-2">
+                                <li><span class="text-red-accent">'about'</span>, <span class="text-red-accent">'skills'</span>, <span class="text-red-accent">'projects'</span>, <span class="text-red-accent">'contact'</span> - Scroll to section.</li>
+                                <li><span class="text-red-accent">'ask &lt;question&gt;'</span> - Ask the AI Career Coach a question.</li>
+                                <li><span class="text-red-accent">'download cv'</span> - Initiates CV download.</li>
+                                <li><span class="text-red-accent">'clear'</span> - Clears the terminal.</li>
+                            </ul>
+                        `;
+                        break;
+                    case 'about': case 'skills': case 'projects': case 'contact':
+                        response = `Navigating to ${command} section...`;
+                        document.getElementById(command).scrollIntoView({ behavior: 'smooth' });
+                        break;
+                    case 'download cv':
+                         response = `Initiating CV download...`;
+                         document.querySelector('a[download]').click();
+                         break;
+                    case 'clear':
+                        terminalBody.innerHTML = '';
+                        break;
+                    default:
+                        response = `<div>bash: command not found: ${command}. Type 'help' for a list of commands.</div>`;
+                }
+                if (response) {
+                    output.innerHTML = response;
+                    terminalBody.appendChild(output);
+                }
             }
 
             createNewInputLine();
@@ -440,7 +533,8 @@
 
         // Initial setup for terminal
         terminalBody.innerHTML = `<div>Welcome to my interactive terminal.</div>
-                                  <div>Type <span class="text-red-accent">'help'</span> to see available commands.</div>`;
+                                  <div class="text-yellow-400">✨ This terminal is AI-integrated. Type 'ask &lt;your question&gt;' to chat.</div>
+                                  <div>Type <span class="text-red-accent">'help'</span> for a full list of commands.</div>`;
         createNewInputLine();
         
         // --- Reveal on Scroll ---
