@@ -14,7 +14,6 @@
     <style>
         body {
             font-family: 'Fira Code', monospace;
-            /* background-color: #0a0a0a; -- This is now handled by the canvas */
             color: #e0e0e0;
         }
         #matrix-canvas {
@@ -57,19 +56,10 @@
         }
 
         /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #1a1a1a;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #ff3c3c;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #e02f2f;
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1a1a1a; }
+        ::-webkit-scrollbar-thumb { background: #ff3c3c; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #e02f2f; }
 
         /* Reveal on scroll */
         .reveal {
@@ -77,82 +67,67 @@
             transform: translateY(30px);
             transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .terminal-highlight {
-            animation: pulse-glow 3s infinite alternate;
-            position: relative;
-            overflow: hidden;
-        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .terminal-highlight { animation: pulse-glow 3s infinite alternate; position: relative; overflow: hidden; }
         .terminal-highlight::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
             background: linear-gradient(to right, transparent, rgba(255, 60, 60, 0.5), transparent);
-            animation: scan-line 5s linear infinite;
-            border-radius: 50%;
+            animation: scan-line 5s linear infinite; border-radius: 50%;
         }
 
         @keyframes pulse-glow {
-            from {
-                box-shadow: 0 0 15px rgba(255, 60, 60, 0.4);
-            }
-            to {
-                box-shadow: 0 0 35px rgba(255, 60, 60, 0.7);
-            }
+            from { box-shadow: 0 0 15px rgba(255, 60, 60, 0.4); }
+            to { box-shadow: 0 0 35px rgba(255, 60, 60, 0.7); }
         }
         @keyframes scan-line {
-            0% { top: -10px; opacity: 0.2; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { top: 100%; opacity: 0.2; }
+            0% { top: -10px; opacity: 0.2; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0.2; }
         }
-        .nav-link {
-            color: #e0e0e0;
-            transition: color 0.3s ease, background-color 0.3s ease;
-        }
-        .nav-link:hover {
-            color: #ff3c3c;
-        }
-        .nav-link.active {
-            background-color: #ff3c3c;
-            color: white;
-        }
+        .nav-link { color: #e0e0e0; transition: color 0.3s ease, background-color 0.3s ease; }
+        .nav-link:hover { color: #ff3c3c; }
+        .nav-link.active { background-color: #ff3c3c; color: white; }
+        
         /* Download CV Button Animation */
-        .download-btn-container {
-            position: relative;
-            display: inline-block;
+        .download-btn-container { position: relative; display: inline-block; }
+        .download-btn-container::before, .download-btn-container::after {
+            content: ''; position: absolute; width: 25px; height: 25px;
+            border-color: #ff3c3c; border-style: solid; animation: cv-corners 4s infinite;
         }
-        .download-btn-container::before,
-        .download-btn-container::after {
-            content: '';
-            position: absolute;
-            width: 25px;
-            height: 25px;
-            border-color: #ff3c3c;
-            border-style: solid;
-            animation: cv-corners 4s infinite;
-        }
-        .download-btn-container::before {
-            top: -8px;
-            left: -8px;
-            border-width: 2px 0 0 2px;
-        }
-        .download-btn-container::after {
-            bottom: -8px;
-            right: -8px;
-            border-width: 0 2px 2px 0;
-        }
+        .download-btn-container::before { top: -8px; left: -8px; border-width: 2px 0 0 2px; }
+        .download-btn-container::after { bottom: -8px; right: -8px; border-width: 0 2px 2px 0; }
 
         @keyframes cv-corners {
             0%, 100% { width: 25px; height: 25px; opacity: 1;}
             50% { width: calc(100% + 16px); height: calc(100% + 16px); opacity: 0.5; }
         }
+
+        /* Gemini AI Modal Styles */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.visible { opacity: 1; pointer-events: auto; }
+        .modal-content {
+            background-color: #1a1a1a; border: 1px solid #ff3c3c;
+            border-radius: 8px; padding: 2rem; max-width: 600px; width: 90%;
+            transform: scale(0.9); transition: transform 0.3s ease;
+            position: relative;
+        }
+        .modal-overlay.visible .modal-content { transform: scale(1); }
+        .modal-close-btn {
+            position: absolute; top: 1rem; right: 1rem;
+            background: none; border: none; color: #e0e0e0;
+            font-size: 1.5rem; cursor: pointer; transition: color 0.2s;
+        }
+        .modal-close-btn:hover { color: #ff3c3c; }
+        .spinner {
+            width: 48px; height: 48px; border: 5px solid #333;
+            border-bottom-color: #ff3c3c; border-radius: 50%;
+            display: inline-block; box-sizing: border-box;
+            animation: rotation 1s linear infinite; margin: 20px auto;
+        }
+        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="overflow-x-hidden">
@@ -182,7 +157,6 @@
 
     <!-- Header / Hero Section -->
     <header id="home" class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-        <!-- Background Grid -->
         <div class="absolute inset-0 z-0 opacity-10" style="background-image: linear-gradient(#ff3c3c 1px, transparent 1px), linear-gradient(to right, #ff3c3c 1px, transparent 1px); background-size: 2rem 2rem;"></div>
         <div class="absolute inset-0 bg-black/80 z-0"></div>
 
@@ -202,7 +176,6 @@
                 </div>
             </div>
             <div class="flex justify-center">
-                 <!-- TODO: Replace this placeholder with your professional image URL -->
                 <img src="CV.jpg" alt="Chandika Nawodya Senarathna" class="w-64 h-64 md:w-80 md:h-80 rounded-full object-cover border-4 border-red-accent shadow-glow">
             </div>
         </div>
@@ -250,7 +223,6 @@
         <section id="skills" class="reveal">
             <h2 class="text-3xl font-bold text-center mb-12 font-tech"><span class="text-red-accent">02.</span> My Skillset</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- IT Support -->
                 <div class="bg-[#1a1a1a] p-6 rounded-lg border border-gray-800 hover:border-red-accent hover:shadow-glow transition-all">
                     <h3 class="text-xl font-bold text-red-accent mb-4 font-tech"><i class="fas fa-headset mr-2"></i>IT Support</h3>
                     <ul class="space-y-2 text-gray-300">
@@ -261,7 +233,6 @@
                         <li><i class="fas fa-check-circle text-red-accent mr-2"></i>User Administration</li>
                     </ul>
                 </div>
-                <!-- Cybersecurity -->
                 <div class="bg-[#1a1a1a] p-6 rounded-lg border border-gray-800 hover:border-red-accent hover:shadow-glow transition-all">
                     <h3 class="text-xl font-bold text-red-accent mb-4 font-tech"><i class="fas fa-shield-halved mr-2"></i>Cybersecurity</h3>
                     <ul class="space-y-2 text-gray-300">
@@ -272,7 +243,6 @@
                         <li><i class="fas fa-check-circle text-red-accent mr-2"></i>Security Information & Event Management (SIEM)</li>
                     </ul>
                 </div>
-                <!-- Graphic Design -->
                 <div class="bg-[#1a1a1a] p-6 rounded-lg border border-gray-800 hover:border-red-accent hover:shadow-glow transition-all">
                     <h3 class="text-xl font-bold text-red-accent mb-4 font-tech"><i class="fas fa-palette mr-2"></i>Graphic Design</h3>
                     <ul class="space-y-2 text-gray-300">
@@ -291,36 +261,34 @@
             
             <h3 class="text-2xl font-bold text-center text-gray-300 mb-8 font-tech">IT & Cybersecurity</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-                 <!-- Project 1 -->
-                <div class="bg-[#1a1a1a] rounded-lg overflow-hidden border border-gray-800 group">
+                 <div class="bg-[#1a1a1a] rounded-lg overflow-hidden border border-gray-800 group flex flex-col">
                     <img src="lab.jpg" alt="IT Administration Home Lab" class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300">
-                    <div class="p-6">
+                    <div class="p-6 flex flex-col flex-grow">
                         <span class="text-xs font-bold uppercase text-red-accent">IT Support / SysAdmin</span>
                         <h4 class="text-xl font-bold mt-2 mb-2 text-white">IT Administration Home Lab</h4>
-                        <p class="text-gray-400">A self-initiated project to build and manage a complete IT infrastructure using Windows Server, VMware, Active Directory, and Office 365 for user management, deployment, and troubleshooting.</p>
+                        <p class="text-gray-400 flex-grow">A self-initiated project to build and manage a complete IT infrastructure using Windows Server, VMware, Active Directory, and Office 365 for user management, deployment, and troubleshooting.</p>
+                        <button class="ai-explain-btn mt-4 self-start bg-transparent border border-red-accent/50 text-red-accent py-1 px-3 rounded text-sm hover:bg-red-accent hover:text-white transition-all">✨ Ask AI to Explain</button>
                     </div>
                 </div>
-                 <!-- Project 2 -->
-                <div class="bg-[#1a1a1a] rounded-lg overflow-hidden border border-gray-800 group">
+                 <div class="bg-[#1a1a1a] rounded-lg overflow-hidden border border-gray-800 group flex flex-col">
                     <img src="ctf.png" alt="CTF Competitions" class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300">
-                    <div class="p-6">
+                    <div class="p-6 flex flex-col flex-grow">
                         <span class="text-xs font-bold uppercase text-red-accent">Cybersecurity</span>
                         <h4 class="text-xl font-bold mt-2 mb-2 text-white font-tech">Capture The Flag (CTF) Competitions</h4>
-                        <p class="text-gray-400">Actively participate in CTF events like Hack The Box, achieving top rankings and demonstrating practical offensive and defensive security skills in high-pressure environments.</p>
+                        <p class="text-gray-400 flex-grow">Actively participate in CTF events like Hack The Box, achieving top rankings and demonstrating practical offensive and defensive security skills in high-pressure environments.</p>
+                        <button class="ai-explain-btn mt-4 self-start bg-transparent border border-red-accent/50 text-red-accent py-1 px-3 rounded text-sm hover:bg-red-accent hover:text-white transition-all">✨ Ask AI to Explain</button>
                     </div>
                 </div>
             </div>
 
             <h3 class="text-2xl font-bold text-center text-gray-300 mb-8 font-tech">Graphic Design Gallery</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                 <!-- TODO: Replace these placeholders with your design sample images and links -->
                  <a href="#" class="block group"><img src="1.jpg" class="rounded-lg object-cover w-full h-full group-hover:opacity-75 transition-opacity" alt="Design Sample 1"></a>
                  <a href="#" class="block group"><img src="2.jpg" class="rounded-lg object-cover w-full h-full group-hover:opacity-75 transition-opacity" alt="Design Sample 2"></a>
                  <a href="#" class="block group"><img src="3.jpg" class="rounded-lg object-cover w-full h-full group-hover:opacity-75 transition-opacity" alt="Design Sample 4"></a>
                  <a href="#" class="block group"><img src="4.jpg" class="rounded-lg object-cover w-full h-full group-hover:opacity-75 transition-opacity" alt="Design Sample 5"></a>
                  <a href="#" class="block group"><img src="5.jpg" class="rounded-lg object-cover w-full h-full group-hover:opacity-75 transition-opacity" alt="Design Sample 5"></a>
                  <a href="#" class="block group"><img src="6.jpg" class="rounded-lg object-cover w-full h-full group-hover:opacity-75 transition-opacity" alt="Design Sample 5"></a>
-                 </a>
             </div>
         </section>
 
@@ -330,6 +298,7 @@
             <p class="text-center max-w-xl mx-auto text-gray-400 mb-12">
                 My inbox is always open. Whether you have a question, a project proposal, or just want to say hi, I'll get back to you!
             </p>
+
             <div class="text-center">
                  <a href="mailto:chandikanawodya59@gmail.com" class="inline-block bg-red-accent text-white py-3 px-8 rounded-lg font-bold hover:bg-opacity-80 transition-all text-lg">Say Hello</a>
 
@@ -339,7 +308,6 @@
                     <a href="https://linktr.ee/chandikanawodya" target="_blank" class="text-gray-400 hover:text-red-accent text-2xl transition-colors"><i class="fas fa-tree"></i></a>
                 </div>
                 
-                 <!-- TODO: Replace the '#' with a direct link to your CV PDF file -->
                 <div class="download-btn-container mt-12">
                      <a href="CHANDIKA-NAWODYA-SENARATHNA-CV.pdf" download class="border-2 border-red-accent text-white py-3 px-8 rounded-lg font-bold hover:bg-red-accent transition-all">
                         <i class="fas fa-download mr-2"></i>Download My CV
@@ -347,68 +315,77 @@
                 </div>
             </div>
         </section>
-
     </main>
 
     <footer class="text-center py-6 border-t border-gray-800">
         <p class="text-gray-500">&copy; 2025 Chandika Nawodya Senarathna (cr4z3sku11). All Rights Reserved.</p>
     </footer>
 
+    <!-- AI Explanation Modal -->
+    <div id="ai-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="modal-close-btn" class="modal-close-btn">&times;</button>
+            <h3 class="text-2xl font-bold text-red-accent mb-4 font-tech">✨ AI Project Analysis</h3>
+            <div id="modal-body">
+                <div class="flex justify-center items-center h-48">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // --- Matrix Rain Animation ---
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
-
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
         const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
         const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         const nums = '0123456789';
         const alphabet = katakana + latin + nums;
-
         const fontSize = 16;
-        const columns = Math.floor(canvas.width / fontSize);
-        const rainDrops = [];
+        let columns;
+        let rainDrops = [];
+        let matrixInterval;
 
-        for (let x = 0; x < columns; x++) {
-            rainDrops[x] = 1;
+        function initializeMatrix() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            columns = Math.floor(canvas.width / fontSize);
+            rainDrops = [];
+            for (let x = 0; x < columns; x++) { rainDrops[x] = 1; }
         }
 
         const drawMatrix = () => {
             ctx.fillStyle = 'rgba(10, 10, 10, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = 'rgba(255, 60, 60, 0.7)'; // Red accent color for the rain
+            ctx.fillStyle = 'rgba(255, 60, 60, 0.7)';
             ctx.font = fontSize + 'px monospace';
-
             for (let i = 0; i < rainDrops.length; i++) {
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) { rainDrops[i] = 0; }
                 const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
                 ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
-
-                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    rainDrops[i] = 0;
-                }
                 rainDrops[i]++;
             }
         };
 
-        const matrixInterval = setInterval(drawMatrix, 30);
-
+        function startAnimation() {
+            initializeMatrix();
+            if (matrixInterval) clearInterval(matrixInterval);
+            matrixInterval = setInterval(drawMatrix, 33);
+        }
+        startAnimation();
+        let timeout;
         window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            // This ensures the animation adapts smoothly on resize
-            location.reload(); 
+            clearTimeout(timeout);
+            timeout = setTimeout(startAnimation, 150);
         });
-
 
         // --- Typing Animation ---
         const typedTextSpan = document.getElementById('typed-text');
         const textArray = ["IT Support Professional", "Cybersecurity Student", "Graphic Designer"];
         const typingDelay = 100;
         const erasingDelay = 50;
-        const newTextDelay = 2000; // Delay between current and next text
+        const newTextDelay = 2000;
         let textArrayIndex = 0;
         let charIndex = 0;
 
@@ -421,7 +398,6 @@
                 setTimeout(erase, newTextDelay);
             }
         }
-
         function erase() {
             if (charIndex > 0) {
                 typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex - 1);
@@ -433,41 +409,82 @@
                 setTimeout(type, typingDelay + 1100);
             }
         }
-
         document.addEventListener("DOMContentLoaded", function() {
             if (textArray.length) setTimeout(type, newTextDelay + 250);
         });
+        
+        // --- Gemini API Integration ---
+        const apiKey = ""; // This will be handled by the execution environment.
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
+        async function callGeminiAPI(userPrompt, systemInstruction, useSearch) {
+            const payload = {
+                contents: [{ parts: [{ text: userPrompt }] }],
+                systemInstruction: { parts: [{ text: systemInstruction }] }
+            };
+
+            if (useSearch) {
+                payload.tools = [{ "google_search": {} }];
+            }
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) {
+                    throw new Error(`API call failed with status: ${response.status}`);
+                }
+                const result = await response.json();
+                return result.candidates?.[0]?.content?.parts?.[0]?.text || "No response text found.";
+            } catch (error) {
+                console.error("Gemini API Error:", error);
+                return "Error: Could not get a response from the AI. Please check the console for details.";
+            }
+        }
+        
         // --- Interactive Terminal ---
         const terminalInput = document.getElementById('terminal-input');
         const terminalBody = document.getElementById('terminal-body');
 
-        terminalInput.addEventListener('keydown', function(event) {
+        terminalInput.addEventListener('keydown', async function(event) {
             if (event.key === "Enter") {
                 const command = terminalInput.value.trim().toLowerCase();
                 const output = document.createElement('div');
                 const prompt = `<div class="flex"><span class="text-green-400">user@cr4z3sku11:~$</span><span class="ml-2">${command}</span></div>`;
 
                 let response = '';
+                let isAICommand = false;
+
+                if (command.startsWith('ask ')) {
+                    isAICommand = true;
+                    const question = terminalInput.value.substring(4).trim();
+                    output.innerHTML = prompt + `<div><span class="text-yellow-400">port_AI is thinking...</span></div>`;
+                    terminalInput.parentElement.before(output);
+                    terminalInput.value = '';
+
+                    const systemPrompt = "You are a helpful and concise AI career coach specializing in cybersecurity, IT, and tech roles. Your name is port_AI. You are integrated into a personal portfolio terminal. Keep your answers brief, professional, and directly address the user's question. Format your answers for a terminal output, using simple text, bullet points (*), and line breaks.";
+                    const aiResponse = await callGeminiAPI(question, systemPrompt, true);
+                    
+                    output.innerHTML = prompt + `<div class="text-gray-300 whitespace-pre-wrap">${aiResponse}</div>`;
+                    terminalBody.scrollTop = terminalBody.scrollHeight;
+                    return;
+                }
 
                 switch (command) {
                     case 'help':
                         response = `
                             <div>Available commands:</div>
                             <ul class="list-inside list-disc pl-2">
-                                <li><span class="text-red-accent">'about'</span> - Scrolls to the About Me section.</li>
-                                <li><span class="text-red-accent">'skills'</span> - Scrolls to the Skills section.</li>
-                                <li><span class="text-red-accent">'projects'</span> - Scrolls to the Projects section.</li>
-                                <li><span class="text-red-accent">'contact'</span> - Scrolls to the Contact section.</li>
+                                <li><span class="text-red-accent">'about'</span>, <span class="text-red-accent">'skills'</span>, <span class="text-red-accent">'projects'</span>, <span class="text-red-accent">'contact'</span> - Scroll to section.</li>
+                                <li><span class="text-red-accent">'ask &lt;question&gt;'</span> - Ask the AI Career Coach a question.</li>
                                 <li><span class="text-red-accent">'download cv'</span> - Initiates CV download.</li>
                                 <li><span class="text-red-accent">'clear'</span> - Clears the terminal.</li>
                             </ul>
                         `;
                         break;
-                    case 'about':
-                    case 'skills':
-                    case 'projects':
-                    case 'contact':
+                    case 'about': case 'skills': case 'projects': case 'contact':
                         response = `Navigating to ${command} section...`;
                         document.getElementById(command).scrollIntoView({ behavior: 'smooth' });
                         break;
@@ -477,10 +494,9 @@
                          break;
                     case 'clear':
                         terminalBody.innerHTML = '<div>Terminal cleared. Type \'help\' for commands.</div><div class="mt-2 flex"><span class="text-green-400">user@cr4z3sku11:~$</span><input type="text" id="terminal-input" class="terminal-input bg-transparent border-none text-white focus:outline-none flex-1 ml-2" autofocus></div>';
-                        // Re-bind the event listener to the new input
                         document.getElementById('terminal-input').addEventListener('keydown', arguments.callee);
                         document.getElementById('terminal-input').focus();
-                        return; // exit to prevent old logic from running
+                        return;
                     default:
                         response = `<div>bash: command not found: ${command}. Type 'help' for a list of commands.</div>`;
                 }
@@ -495,28 +511,47 @@
             }
         });
         
+        // --- AI Modal Logic ---
+        const modal = document.getElementById('ai-modal');
+        const modalBody = document.getElementById('modal-body');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+        const explainBtns = document.querySelectorAll('.ai-explain-btn');
+        
+        explainBtns.forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const card = e.target.closest('.group');
+                const title = card.querySelector('h4').textContent;
+                const description = card.querySelector('p').textContent;
+
+                modal.classList.add('visible');
+                modalBody.innerHTML = `<div class="flex justify-center items-center h-48"><div class="spinner"></div></div>`;
+                
+                const systemPrompt = "You are an AI assistant explaining a project to a non-technical hiring manager. Your tone should be professional but easy to understand. Avoid jargon where possible.";
+                const userPrompt = `Please explain the business value and skills demonstrated by the following project in 2-3 short paragraphs. Project Title: "${title}". Description: "${description}"`;
+                
+                const aiResponse = await callGeminiAPI(userPrompt, systemPrompt, false);
+                modalBody.innerHTML = `<p class="text-gray-300 whitespace-pre-wrap">${aiResponse}</p>`;
+            });
+        });
+        
+        const closeModal = () => modal.classList.remove('visible');
+        modalCloseBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
         // --- Reveal on Scroll ---
         const revealElements = document.querySelectorAll('.reveal');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    // Optional: unobserve after revealing
-                    // observer.unobserve(entry.target);
-                }
+                if (entry.isIntersecting) { entry.target.classList.add('visible'); }
             });
-        }, {
-            threshold: 0.1
-        });
-
-        revealElements.forEach(el => {
-            observer.observe(el);
-        });
+        }, { threshold: 0.1 });
+        revealElements.forEach(el => { observer.observe(el); });
 
         // --- Navbar Active State on Scroll ---
         const sections = document.querySelectorAll('header, section[id]');
         const navLinks = document.querySelectorAll('.nav-link');
-
         const navObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -530,15 +565,8 @@
                 }
             });
         }, { rootMargin: '-50% 0px -50% 0px' });
-
-        sections.forEach(section => {
-            navObserver.observe(section);
-        });
-
-
+        sections.forEach(section => { navObserver.observe(section); });
     </script>
 </body>
 </html>
-
-
 
