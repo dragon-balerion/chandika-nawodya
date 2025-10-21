@@ -99,35 +99,6 @@
             0%, 100% { width: 25px; height: 25px; opacity: 1;}
             50% { width: calc(100% + 16px); height: calc(100% + 16px); opacity: 0.5; }
         }
-
-        /* Gemini AI Modal Styles */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-        }
-        .modal-overlay.visible { opacity: 1; pointer-events: auto; }
-        .modal-content {
-            background-color: #1a1a1a; border: 1px solid #ff3c3c;
-            border-radius: 8px; padding: 2rem; max-width: 600px; width: 90%;
-            transform: scale(0.9); transition: transform 0.3s ease;
-            position: relative;
-        }
-        .modal-overlay.visible .modal-content { transform: scale(1); }
-        .modal-close-btn {
-            position: absolute; top: 1rem; right: 1rem;
-            background: none; border: none; color: #e0e0e0;
-            font-size: 1.5rem; cursor: pointer; transition: color 0.2s;
-        }
-        .modal-close-btn:hover { color: #ff3c3c; }
-        .spinner {
-            width: 48px; height: 48px; border: 5px solid #333;
-            border-bottom-color: #ff3c3c; border-radius: 50%;
-            display: inline-block; box-sizing: border-box;
-            animation: rotation 1s linear infinite; margin: 20px auto;
-        }
-        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="overflow-x-hidden">
@@ -196,12 +167,7 @@
                     <p class="flex-1 text-center text-sm text-gray-400">bash -- portfolio_nav</p>
                 </div>
                 <div id="terminal-body" class="p-4 h-64 overflow-y-auto font-mono text-sm">
-                    <div>Welcome to my interactive terminal.</div>
-                    <div>Type <span class="text-red-accent">'help'</span> to see available commands.</div>
-                    <div class="mt-2 flex">
-                        <span class="text-green-400">user@cr4z3sku11:~$</span>
-                        <input type="text" id="terminal-input" class="terminal-input bg-transparent border-none text-white focus:outline-none flex-1 ml-2" autofocus>
-                    </div>
+                    <!-- Terminal content will be generated here -->
                 </div>
             </div>
         </section>
@@ -215,6 +181,16 @@
                 </p>
                 <p>
                     This technical acumen is paired with a creative passion for design, allowing me to not only solve complex problems but also to communicate solutions with clarity and visual impact. I thrive on troubleshooting, securing digital landscapes, and creating intuitive, engaging user experiences.
+                </p>
+            </div>
+        </section>
+
+        <!-- AI Integration Note -->
+        <section class="reveal">
+            <div class="bg-[#1a1a1a] p-8 rounded-lg border border-gray-800 text-center max-w-3xl mx-auto hover:border-red-accent hover:shadow-glow transition-all">
+                <h3 class="text-xl font-bold text-red-accent mb-4 font-tech"><i class="fas fa-robot mr-2"></i>A Note on AI Integration</h3>
+                <p class="text-gray-300 leading-relaxed">
+                    This portfolio previously included live AI features, such as a project explainer and a career-coach chatbot, powered by the Google Gemini API. While these have been removed to streamline the user experience and ensure stability, this project demonstrates my ability to integrate and interact with large language models (LLMs) in a modern web environment using JavaScript.
                 </p>
             </div>
         </section>
@@ -267,7 +243,6 @@
                         <span class="text-xs font-bold uppercase text-red-accent">IT Support / SysAdmin</span>
                         <h4 class="text-xl font-bold mt-2 mb-2 text-white">IT Administration Home Lab</h4>
                         <p class="text-gray-400 flex-grow">A self-initiated project to build and manage a complete IT infrastructure using Windows Server, VMware, Active Directory, and Office 365 for user management, deployment, and troubleshooting.</p>
-                        <button class="ai-explain-btn mt-4 self-start bg-transparent border border-red-accent/50 text-red-accent py-1 px-3 rounded text-sm hover:bg-red-accent hover:text-white transition-all">✨ Ask AI to Explain</button>
                     </div>
                 </div>
                  <div class="bg-[#1a1a1a] rounded-lg overflow-hidden border border-gray-800 group flex flex-col">
@@ -276,7 +251,6 @@
                         <span class="text-xs font-bold uppercase text-red-accent">Cybersecurity</span>
                         <h4 class="text-xl font-bold mt-2 mb-2 text-white font-tech">Capture The Flag (CTF) Competitions</h4>
                         <p class="text-gray-400 flex-grow">Actively participate in CTF events like Hack The Box, achieving top rankings and demonstrating practical offensive and defensive security skills in high-pressure environments.</p>
-                        <button class="ai-explain-btn mt-4 self-start bg-transparent border border-red-accent/50 text-red-accent py-1 px-3 rounded text-sm hover:bg-red-accent hover:text-white transition-all">✨ Ask AI to Explain</button>
                     </div>
                 </div>
             </div>
@@ -320,19 +294,6 @@
     <footer class="text-center py-6 border-t border-gray-800">
         <p class="text-gray-500">&copy; 2025 Chandika Nawodya Senarathna (cr4z3sku11). All Rights Reserved.</p>
     </footer>
-
-    <!-- AI Explanation Modal -->
-    <div id="ai-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button id="modal-close-btn" class="modal-close-btn">&times;</button>
-            <h3 class="text-2xl font-bold text-red-accent mb-4 font-tech">✨ AI Project Analysis</h3>
-            <div id="modal-body">
-                <div class="flex justify-center items-center h-48">
-                    <div class="spinner"></div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script>
         // --- Matrix Rain Animation ---
@@ -413,133 +374,75 @@
             if (textArray.length) setTimeout(type, newTextDelay + 250);
         });
         
-        // --- Gemini API Integration ---
-        const apiKey = ""; // This will be handled by the execution environment.
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-
-        async function callGeminiAPI(userPrompt, systemInstruction, useSearch) {
-            const payload = {
-                contents: [{ parts: [{ text: userPrompt }] }],
-                systemInstruction: { parts: [{ text: systemInstruction }] }
-            };
-
-            if (useSearch) {
-                payload.tools = [{ "google_search": {} }];
-            }
-
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                if (!response.ok) {
-                    throw new Error(`API call failed with status: ${response.status}`);
-                }
-                const result = await response.json();
-                return result.candidates?.[0]?.content?.parts?.[0]?.text || "No response text found.";
-            } catch (error) {
-                console.error("Gemini API Error:", error);
-                return "Error: Could not get a response from the AI. Please check the console for details.";
-            }
-        }
-        
         // --- Interactive Terminal ---
-        const terminalInput = document.getElementById('terminal-input');
         const terminalBody = document.getElementById('terminal-body');
 
-        terminalInput.addEventListener('keydown', async function(event) {
-            if (event.key === "Enter") {
-                const command = terminalInput.value.trim().toLowerCase();
-                const output = document.createElement('div');
-                const prompt = `<div class="flex"><span class="text-green-400">user@cr4z3sku11:~$</span><span class="ml-2">${command}</span></div>`;
+        function createNewInputLine() {
+             const newInputLine = document.createElement('div');
+             newInputLine.className = 'mt-2 flex';
+             newInputLine.innerHTML = `
+                <span class="text-green-400">user@cr4z3sku11:~$</span>
+                <input type="text" class="terminal-input bg-transparent border-none text-white focus:outline-none flex-1 ml-2" autofocus>`;
+             terminalBody.appendChild(newInputLine);
+             const newTerminalInput = newInputLine.querySelector('input');
+             newTerminalInput.focus();
+             newTerminalInput.addEventListener('keydown', handleTerminalInput);
+        }
+        
+        async function handleTerminalInput(event) {
+            if (event.key !== "Enter") return;
 
-                let response = '';
-                let isAICommand = false;
+            const terminalInput = event.target;
+            const command = terminalInput.value.trim().toLowerCase();
+            const prompt = `<div class="flex"><span class="text-green-400">user@cr4z3sku11:~$</span><span class="ml-2">${command}</span></div>`;
+            
+            terminalInput.disabled = true;
+            const parentDiv = terminalInput.parentElement;
+            parentDiv.innerHTML = prompt;
 
-                if (command.startsWith('ask ')) {
-                    isAICommand = true;
-                    const question = terminalInput.value.substring(4).trim();
-                    output.innerHTML = prompt + `<div><span class="text-yellow-400">port_AI is thinking...</span></div>`;
-                    terminalInput.parentElement.before(output);
-                    terminalInput.value = '';
-
-                    const systemPrompt = "You are a helpful and concise AI career coach specializing in cybersecurity, IT, and tech roles. Your name is port_AI. You are integrated into a personal portfolio terminal. Keep your answers brief, professional, and directly address the user's question. Format your answers for a terminal output, using simple text, bullet points (*), and line breaks.";
-                    const aiResponse = await callGeminiAPI(question, systemPrompt, true);
-                    
-                    output.innerHTML = prompt + `<div class="text-gray-300 whitespace-pre-wrap">${aiResponse}</div>`;
-                    terminalBody.scrollTop = terminalBody.scrollHeight;
-                    return;
-                }
-
-                switch (command) {
-                    case 'help':
-                        response = `
-                            <div>Available commands:</div>
-                            <ul class="list-inside list-disc pl-2">
-                                <li><span class="text-red-accent">'about'</span>, <span class="text-red-accent">'skills'</span>, <span class="text-red-accent">'projects'</span>, <span class="text-red-accent">'contact'</span> - Scroll to section.</li>
-                                <li><span class="text-red-accent">'ask &lt;question&gt;'</span> - Ask the AI Career Coach a question.</li>
-                                <li><span class="text-red-accent">'download cv'</span> - Initiates CV download.</li>
-                                <li><span class="text-red-accent">'clear'</span> - Clears the terminal.</li>
-                            </ul>
-                        `;
-                        break;
-                    case 'about': case 'skills': case 'projects': case 'contact':
-                        response = `Navigating to ${command} section...`;
-                        document.getElementById(command).scrollIntoView({ behavior: 'smooth' });
-                        break;
-                    case 'download cv':
-                         response = `Initiating CV download...`;
-                         document.querySelector('a[download]').click();
-                         break;
-                    case 'clear':
-                        terminalBody.innerHTML = '<div>Terminal cleared. Type \'help\' for commands.</div><div class="mt-2 flex"><span class="text-green-400">user@cr4z3sku11:~$</span><input type="text" id="terminal-input" class="terminal-input bg-transparent border-none text-white focus:outline-none flex-1 ml-2" autofocus></div>';
-                        document.getElementById('terminal-input').addEventListener('keydown', arguments.callee);
-                        document.getElementById('terminal-input').focus();
-                        return;
-                    default:
-                        response = `<div>bash: command not found: ${command}. Type 'help' for a list of commands.</div>`;
-                }
-
-                if (command !== 'clear') {
-                    output.innerHTML = prompt + response;
-                    terminalInput.parentElement.before(output);
-                }
-
-                terminalInput.value = '';
-                terminalBody.scrollTop = terminalBody.scrollHeight;
+            const output = document.createElement('div');
+            let response = '';
+            
+            switch (command) {
+                case 'help':
+                    response = `
+                        <div>Available commands:</div>
+                        <ul class="list-inside list-disc pl-2">
+                            <li><span class="text-red-accent">'about'</span>, <span class="text-red-accent">'skills'</span>, <span class="text-red-accent">'projects'</span>, <span class="text-red-accent">'contact'</span> - Scroll to section.</li>
+                            <li><span class="text-red-accent">'download cv'</span> - Initiates CV download.</li>
+                            <li><span class="text-red-accent">'clear'</span> - Clears the terminal.</li>
+                        </ul>
+                    `;
+                    break;
+                case 'about': case 'skills': case 'projects': case 'contact':
+                    response = `Navigating to ${command} section...`;
+                    document.getElementById(command).scrollIntoView({ behavior: 'smooth' });
+                    break;
+                case 'download cv':
+                     response = `Initiating CV download...`;
+                     document.querySelector('a[download]').click();
+                     break;
+                case 'clear':
+                    terminalBody.innerHTML = '';
+                    break;
+                default:
+                    response = `<div>bash: command not found: ${command}. Type 'help' for a list of commands.</div>`;
             }
-        });
-        
-        // --- AI Modal Logic ---
-        const modal = document.getElementById('ai-modal');
-        const modalBody = document.getElementById('modal-body');
-        const modalCloseBtn = document.getElementById('modal-close-btn');
-        const explainBtns = document.querySelectorAll('.ai-explain-btn');
-        
-        explainBtns.forEach(btn => {
-            btn.addEventListener('click', async (e) => {
-                const card = e.target.closest('.group');
-                const title = card.querySelector('h4').textContent;
-                const description = card.querySelector('p').textContent;
 
-                modal.classList.add('visible');
-                modalBody.innerHTML = `<div class="flex justify-center items-center h-48"><div class="spinner"></div></div>`;
-                
-                const systemPrompt = "You are an AI assistant explaining a project to a non-technical hiring manager. Your tone should be professional but easy to understand. Avoid jargon where possible.";
-                const userPrompt = `Please explain the business value and skills demonstrated by the following project in 2-3 short paragraphs. Project Title: "${title}". Description: "${description}"`;
-                
-                const aiResponse = await callGeminiAPI(userPrompt, systemPrompt, false);
-                modalBody.innerHTML = `<p class="text-gray-300 whitespace-pre-wrap">${aiResponse}</p>`;
-            });
-        });
-        
-        const closeModal = () => modal.classList.remove('visible');
-        modalCloseBtn.addEventListener('click', closeModal);
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeModal();
-        });
+            if (response) {
+                output.innerHTML = response;
+                terminalBody.appendChild(output);
+            }
 
+            createNewInputLine();
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+        }
+
+        // Initial setup for terminal
+        terminalBody.innerHTML = `<div>Welcome to my interactive terminal.</div>
+                                  <div>Type <span class="text-red-accent">'help'</span> to see available commands.</div>`;
+        createNewInputLine();
+        
         // --- Reveal on Scroll ---
         const revealElements = document.querySelectorAll('.reveal');
         const observer = new IntersectionObserver((entries) => {
