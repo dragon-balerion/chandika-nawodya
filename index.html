@@ -67,6 +67,12 @@ h1 .grad{background:linear-gradient(100deg,var(--cyan),var(--violet) 70%);-webki
 /* SOC panel */
 .soc{padding:18px;transform-style:preserve-3d}
 .soc-h{display:flex;justify-content:space-between;font-size:.75rem;color:var(--mute);margin-bottom:12px}
+.portrait{position:relative;border-radius:14px;overflow:hidden;border:1px solid rgba(34,228,255,.45);box-shadow:0 0 30px rgba(34,228,255,.25);margin-bottom:12px}
+.portrait img{display:block;width:100%;height:260px;object-fit:cover;object-position:50% 18%}
+.portrait::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 65%,rgba(5,7,13,.75))}
+.tagid{position:absolute;left:10px;bottom:10px;z-index:2;font-size:.72rem;padding:4px 10px;border-radius:999px;background:rgba(5,7,13,.7);border:1px solid var(--line);display:flex;gap:7px;align-items:center}
+.who{margin-bottom:14px}.who b{display:block;font-size:1.05rem}.who small{display:block;color:var(--mute)}
+@media(max-width:720px){.portrait img{height:300px}}
 .avatar{display:flex;gap:14px;align-items:center;margin-bottom:16px}
 .avatar img{width:68px;height:68px;border-radius:16px;object-fit:cover;border:1px solid var(--cyan);box-shadow:0 0 24px rgba(34,228,255,.35)}
 .avatar small{color:var(--mute);display:block}
@@ -214,7 +220,8 @@ footer{padding-bottom:70px}
 
   <div class="card soc" id="tilt">
     <div class="soc-h mono"><span>● soc-console / live</span><span>simulated feed</span></div>
-    <div class="avatar"><img src="CV.jpg" alt="Chandika"><div><b>cr4z3sku11</b><small class="mono">Associate System Engineer</small><small class="mono" style="color:var(--lime)">status: monitoring</small></div></div>
+    <div class="portrait"><img src="CV.jpg" alt="Chandika Nawodya Senarathna"><span class="tagid mono"><i class="dot"></i> cr4z3sku11 · ID verified</span></div>
+    <div class="who"><b>Chandika Nawodya Senarathna</b><small class="mono">Associate System Engineer</small><small class="mono" style="color:var(--lime)">status: monitoring</small></div>
     <canvas id="spark" height="80"></canvas>
     <div class="stats">
       <div class="stat"><b id="s1">0</b><span>events / s</span></div>
