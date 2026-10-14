@@ -1,521 +1,499 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chandika Nawodya Senarathna | Cybersecurity Portfolio</title>
-    <link rel="icon" type="image/png" href="icon.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chandika Nawodya Senarathna | Systems & Security</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="alternate icon" type="image/png" href="icon.png">
+<meta name="theme-color" content="#05070d">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05070d; --panel:rgba(14,20,34,.62); --line:rgba(120,160,255,.14);
+  --text:#e6ebf5; --mute:#8b95ab;
+  --cyan:#22e4ff; --violet:#8b5cf6; --lime:#a3ff6b; --alert:#ff4d5e;
+  --mx:50%; --my:50%;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;line-height:1.6;overflow-x:hidden}
+.mono{font-family:'JetBrains Mono',monospace}
+a{color:inherit;text-decoration:none}
+#net{position:fixed;inset:0;z-index:-2}
+.glow{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(600px circle at var(--mx) var(--my),rgba(34,228,255,.10),transparent 60%),
+  radial-gradient(900px 500px at 85% -10%,rgba(139,92,246,.18),transparent 60%)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
 
+/* nav */
+nav{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:50;display:flex;align-items:center;gap:6px;
+  padding:6px;border:1px solid var(--line);border-radius:999px;background:rgba(8,12,22,.7);backdrop-filter:blur(14px)}
+nav a{padding:7px 14px;border-radius:999px;font-size:.85rem;color:var(--mute);transition:.2s}
+nav a:hover,nav a.on{color:#fff;background:rgba(34,228,255,.12)}
+nav .k{font-size:.72rem;border:1px solid var(--line);padding:5px 10px;border-radius:999px;color:var(--mute);cursor:pointer;background:none}
+nav .k:hover{color:var(--cyan);border-color:var(--cyan)}
+@media(max-width:720px){nav{max-width:94vw;overflow-x:auto;scrollbar-width:none}nav::-webkit-scrollbar{display:none}nav a{white-space:nowrap;padding:7px 11px;font-size:.8rem}nav .k{display:none}.hero{padding-top:100px!important}#tbody{height:300px;font-size:.78rem}.tin{flex-wrap:wrap;gap:0 8px}.card{backdrop-filter:none}section{padding:64px 0}}
 
-    <style>
-        body {
-            font-family: 'Fira Code', monospace;
-            color: #e0e0e0;
-        }
-        #matrix-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -10;
-        }
-        .text-red-accent { color: #ff3c3c; }
-        .bg-red-accent { background-color: #ff3c3c; }
-        .border-red-accent { border-color: #ff3c3c; }
-        .shadow-glow { box-shadow: 0 0 15px rgba(255, 60, 60, 0.4); }
+/* hero */
+.hero{min-height:100vh;display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;padding:120px 0 60px}
+@media(max-width:900px){.hero{grid-template-columns:1fr}}
+.badge{display:inline-flex;gap:8px;align-items:center;font-size:.78rem;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--mute)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.3}}
+h1{font-size:clamp(2.6rem,7vw,5.2rem);line-height:1.02;letter-spacing:-.03em;margin:22px 0 14px;font-weight:700}
+h1 .grad{background:linear-gradient(100deg,var(--cyan),var(--violet) 70%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.role{font-size:1.25rem;color:var(--mute);min-height:2em}
+.role b{color:var(--cyan);font-weight:500}
+.cur{display:inline-block;width:2px;height:1.1em;background:var(--cyan);vertical-align:-3px;animation:pulse 1s infinite}
+.lead{max-width:520px;margin:16px 0 28px;color:#b6bfd2}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{padding:12px 22px;border-radius:12px;font-weight:600;font-size:.95rem;border:1px solid var(--line);transition:.25s;cursor:pointer;display:inline-block}
+.btn.p{background:linear-gradient(120deg,var(--cyan),#5b8cff);color:#021018;border:0;box-shadow:0 8px 30px -8px rgba(34,228,255,.6)}
+.btn.p:hover{transform:translateY(-2px);box-shadow:0 12px 36px -6px rgba(34,228,255,.8)}
+.btn:not(.p):hover{border-color:var(--cyan);color:var(--cyan)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:30px}
+.chip{font-size:.75rem;padding:4px 10px;border-radius:6px;background:rgba(139,92,246,.12);color:#c4b0ff;border:1px solid rgba(139,92,246,.25)}
 
-        .font-tech { font-family: 'Orbitron', sans-serif; }
+/* cards */
+.card{position:relative;border:1px solid var(--line);border-radius:18px;background:var(--panel);backdrop-filter:blur(10px);overflow:hidden;transition:border-color .3s,transform .3s}
+.card::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:.3s;
+  background:radial-gradient(320px circle at var(--cx,50%) var(--cy,50%),rgba(34,228,255,.14),transparent 60%)}
+.card:hover::before{opacity:1}
+.card:hover{border-color:rgba(34,228,255,.4)}
 
-        /* Terminal styling */
-        .terminal {
-            background-color: rgba(20, 20, 20, 0.85);
-            backdrop-filter: blur(10px);
-            border: 1px solid #333;
-        }
-        .terminal-header {
-            background-color: #1e1e1e;
-            border-bottom: 1px solid #333;
-        }
-        .terminal-input::after {
-            content: '█';
-            animation: blink 1s step-end infinite;
-        }
-        @keyframes blink {
-            50% { opacity: 0; }
-        }
+/* SOC panel */
+.soc{padding:18px;transform-style:preserve-3d}
+.soc-h{display:flex;justify-content:space-between;font-size:.75rem;color:var(--mute);margin-bottom:12px}
+.avatar{display:flex;gap:14px;align-items:center;margin-bottom:16px}
+.avatar img{width:68px;height:68px;border-radius:16px;object-fit:cover;border:1px solid var(--cyan);box-shadow:0 0 24px rgba(34,228,255,.35)}
+.avatar small{color:var(--mute);display:block}
+#spark{width:100%;height:80px;display:block}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.stat{padding:10px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid var(--line)}
+.stat b{display:block;font-size:1.25rem;font-family:'JetBrains Mono'}
+.stat span{font-size:.68rem;color:var(--mute)}
+#feed{font-size:.72rem;height:112px;overflow:hidden;color:var(--mute)}
+#feed div{padding:2px 0;animation:in .4s}
+@keyframes in{from{opacity:0;transform:translateY(6px)}}
+.sev-h{color:var(--alert)}.sev-m{color:#ffb84d}.sev-l{color:var(--lime)}
 
-        /* Typing animation */
-        .typed-cursor {
-            opacity: 1;
-            animation: blink 0.7s infinite;
-        }
+/* sections */
+section{padding:90px 0}
+.eyebrow{font-family:'JetBrains Mono';color:var(--cyan);font-size:.8rem;letter-spacing:.04em}
+h2{font-size:clamp(1.9rem,4vw,2.9rem);letter-spacing:-.02em;margin:8px 0 40px;line-height:1.1}
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+.bento .card{padding:26px}
+.c-a{grid-column:span 4}.c-b{grid-column:span 2}.c-c{grid-column:span 3}.c-d{grid-column:span 3}
+@media(max-width:800px){.bento>*{grid-column:span 6!important}}
+.bento h3{font-size:1.1rem;margin-bottom:10px}
+.big{font-size:2.8rem;font-weight:700;font-family:'JetBrains Mono';background:linear-gradient(120deg,var(--cyan),var(--lime));-webkit-background-clip:text;background-clip:text;color:transparent}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.tag{font-size:.78rem;padding:5px 11px;border-radius:8px;border:1px solid var(--line);background:rgba(255,255,255,.03);transition:.2s}
+.tag:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px)}
+.bar{margin:10px 0}
+.bar div:first-child{display:flex;justify-content:space-between;font-size:.8rem;color:var(--mute)}
+.bar i{display:block;height:5px;border-radius:5px;background:rgba(255,255,255,.07);margin-top:5px;overflow:hidden}
+.bar i::after{content:"";display:block;height:100%;width:0;border-radius:5px;background:linear-gradient(90deg,var(--cyan),var(--violet));transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.vis .bar i::after{width:var(--w)}
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #1a1a1a; }
-        ::-webkit-scrollbar-thumb { background: #ff3c3c; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #e02f2f; }
+/* timeline */
+.tl{position:relative;padding-left:34px}
+.tl::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--cyan),var(--violet),transparent)}
+.tl .card{padding:22px;margin-bottom:18px}
+.tl .card::after{content:"";position:absolute;left:-33px;top:28px;width:14px;height:14px;border-radius:50%;background:var(--bg);border:2px solid var(--cyan);box-shadow:0 0 12px var(--cyan)}
+.tl .card{overflow:visible}
+.tl h3{font-size:1.15rem}
+.meta{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;color:var(--mute);font-size:.82rem;margin:2px 0 10px}
+.meta .mono{color:var(--cyan)}
 
-        /* Reveal on scroll */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
-        .terminal-highlight { animation: pulse-glow 3s infinite alternate; position: relative; overflow: hidden; }
-        .terminal-highlight::after {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
-            background: linear-gradient(to right, transparent, rgba(255, 60, 60, 0.5), transparent);
-            animation: scan-line 5s linear infinite; border-radius: 50%;
-        }
+/* projects */
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:18px}
+.proj{display:flex;flex-direction:column;will-change:transform}
+.proj img{width:100%;height:190px;object-fit:cover;filter:saturate(.8) brightness(.8);transition:.4s}
+.proj:hover img{filter:none;transform:scale(1.04)}
+.proj .im{overflow:hidden}
+.proj .b{padding:20px;display:flex;flex-direction:column;gap:8px;flex:1}
+.proj p{color:#b6bfd2;font-size:.9rem;flex:1}
+.lnk{color:var(--cyan);font-size:.85rem;font-family:'JetBrains Mono'}
 
-        @keyframes pulse-glow {
-            from { box-shadow: 0 0 15px rgba(255, 60, 60, 0.4); }
-            to { box-shadow: 0 0 35px rgba(255, 60, 60, 0.7); }
-        }
-        @keyframes scan-line {
-            0% { top: -10px; opacity: 0.2; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0.2; }
-        }
-        .nav-link { color: #e0e0e0; transition: color 0.3s ease, background-color 0.3s ease; }
-        .nav-link:hover { color: #ff3c3c; }
-        .nav-link.active { background-color: #ff3c3c; color: white; }
-        
-        /* Download CV Button Animation */
-        .download-btn-container { position: relative; display: inline-block; }
-        .download-btn-container::before, .download-btn-container::after {
-            content: ''; position: absolute; width: 25px; height: 25px;
-            border-color: #ff3c3c; border-style: solid; animation: cv-corners 4s infinite;
-        }
-        .download-btn-container::before { top: -8px; left: -8px; border-width: 2px 0 0 2px; }
-        .download-btn-container::after { bottom: -8px; right: -8px; border-width: 0 2px 2px 0; }
+/* contact */
+.cta{padding:56px 24px;text-align:center}
+.cta h2{margin-bottom:12px}
+.soc-links{display:flex;gap:12px;justify-content:center;margin-top:26px;flex-wrap:wrap}
+footer{text-align:center;color:var(--mute);font-size:.8rem;padding:30px 0 50px;border-top:1px solid var(--line)}
 
-        @keyframes cv-corners {
-            0%, 100% { width: 25px; height: 25px; opacity: 1;}
-            50% { width: calc(100% + 16px); height: calc(100% + 16px); opacity: 0.5; }
-        }
-    </style>
+/* command palette */
+#pal{position:fixed;inset:0;background:rgba(2,4,10,.7);backdrop-filter:blur(6px);z-index:100;display:none;align-items:flex-start;justify-content:center;padding-top:16vh}
+#pal.open{display:flex}
+#pal .box{width:min(560px,92vw);border:1px solid var(--line);border-radius:16px;background:#0a101c;box-shadow:0 30px 80px rgba(0,0,0,.6);overflow:hidden}
+#pal input{width:100%;padding:18px;background:none;border:0;border-bottom:1px solid var(--line);color:#fff;font:1rem 'JetBrains Mono';outline:0}
+#pal li{list-style:none;padding:12px 18px;cursor:pointer;display:flex;justify-content:space-between;font-size:.92rem}
+#pal li.sel,#pal li:hover{background:rgba(34,228,255,.1);color:var(--cyan)}
+#pal li span{color:var(--mute);font-size:.75rem}
+
+/* terminal */
+.term{border-radius:16px;border:1px solid var(--line);background:rgba(4,8,16,.88);backdrop-filter:blur(10px);overflow:hidden;box-shadow:0 0 60px -20px rgba(34,228,255,.35)}
+.term-h{display:flex;align-items:center;gap:7px;padding:10px 14px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.03)}
+.term-h i{width:11px;height:11px;border-radius:50%}
+.term-h span{flex:1;text-align:center;font-size:.75rem;color:var(--mute)}
+#tbody{height:340px;overflow-y:auto;padding:16px;font:.85rem/1.65 'JetBrains Mono',monospace;color:#c8d3ea}
+#tbody .ln{white-space:pre-wrap;word-break:break-word}
+#tbody .ps{color:var(--lime)}#tbody .ac{color:var(--cyan)}#tbody .er{color:var(--alert)}#tbody .dm{color:var(--mute)}
+.tin{display:flex;gap:8px}
+.tin input{flex:1 1 120px;min-width:0;font-size:16px;background:none;border:0;outline:0;color:#fff;font:inherit;caret-color:var(--cyan)}
+.hint{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.hint button{font:.75rem 'JetBrains Mono';background:rgba(34,228,255,.07);border:1px solid var(--line);color:var(--cyan);padding:5px 11px;border-radius:8px;cursor:pointer}
+.hint button:hover{background:rgba(34,228,255,.18)}
+/* education / certs */
+.two{display:grid;grid-template-columns:1fr 1.5fr;gap:18px}
+@media(max-width:850px){.two{grid-template-columns:1fr}}
+.two>.card{padding:26px}
+.cert-hl{display:flex;flex-direction:column;gap:12px}
+.cert{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.03);transition:.25s}
+.cert:hover{border-color:var(--cyan);transform:translateX(4px)}
+.cert .ic{width:34px;height:34px;flex:none;border-radius:9px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(34,228,255,.2),rgba(139,92,246,.2));color:var(--cyan);font:700 .72rem 'JetBrains Mono'}
+.cert b{display:block;font-size:.92rem;line-height:1.3}.cert small{color:var(--mute);font-size:.76rem}
+.quote{padding:28px;margin-top:18px}
+.quote p{font-size:1rem;color:#cfd7ea;font-style:italic}
+.quote cite{display:block;margin-top:14px;font-style:normal;color:var(--cyan);font-size:.85rem}
+.gen{display:grid;place-items:center;height:190px;font:700 3rem 'JetBrains Mono';background:linear-gradient(135deg,rgba(34,228,255,.12),rgba(139,92,246,.2));color:rgba(255,255,255,.85)}
+/* cyber layer */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:90;opacity:.5;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px)}
+.card{--b:rgba(34,228,255,.55);
+  background-image:
+  linear-gradient(var(--b),var(--b)),linear-gradient(var(--b),var(--b)),
+  linear-gradient(var(--b),var(--b)),linear-gradient(var(--b),var(--b)),
+  linear-gradient(var(--b),var(--b)),linear-gradient(var(--b),var(--b)),
+  linear-gradient(var(--b),var(--b)),linear-gradient(var(--b),var(--b));
+  background-repeat:no-repeat;background-size:14px 1px,1px 14px,14px 1px,1px 14px,14px 1px,1px 14px,14px 1px,1px 14px;
+  background-position:left top,left top,right top,right top,left bottom,left bottom,right bottom,right bottom}
+.eyebrow::before{content:"";display:inline-block;width:7px;height:7px;margin-right:9px;background:var(--lime);box-shadow:0 0 8px var(--lime)}
+#ticker{position:fixed;left:0;right:0;bottom:0;z-index:60;height:28px;overflow:hidden;border-top:1px solid var(--line);background:rgba(4,7,14,.92);font:.7rem/28px 'JetBrains Mono',monospace;color:var(--mute);white-space:nowrap}
+#ticker div{display:inline-block;padding-left:100%;animation:tick 55s linear infinite}
+#ticker b{color:var(--alert);font-weight:500}#ticker i{color:var(--lime);font-style:normal}
+@keyframes tick{to{transform:translateX(-100%)}}
+footer{padding-bottom:70px}
+/* active role beacon */
+.tl .card.live{border-color:rgba(163,255,107,.45)}
+.tl .card.live::after{background:var(--lime);border-color:var(--lime);animation:beacon 1.8s infinite}
+@keyframes beacon{0%{box-shadow:0 0 0 0 rgba(163,255,107,.8),0 0 14px var(--lime)}100%{box-shadow:0 0 0 22px rgba(163,255,107,0),0 0 14px var(--lime)}}
+.live-tag{display:inline-flex;align-items:center;gap:6px;font:.68rem 'JetBrains Mono';color:var(--lime);border:1px solid rgba(163,255,107,.4);padding:2px 8px;border-radius:6px;margin-left:10px;vertical-align:middle;letter-spacing:.1em}
+.live-tag i{width:6px;height:6px;border-radius:50%;background:var(--lime);animation:pulse 1s infinite}
+.rv{opacity:0;transform:translateY(28px);transition:opacity .8s,transform .8s}
+.rv.vis{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:#1e2a44;border-radius:4px}
+</style>
 </head>
-<body class="overflow-x-hidden">
+<body>
+<canvas id="net"></canvas><div class="glow"></div>
 
-    <canvas id="matrix-canvas"></canvas>
+<nav>
+  <a href="#home" class="keep on">~/home</a><a href="#about">about</a><a href="#terminal">terminal</a><a href="#experience">experience</a><a href="#credentials">credentials</a><a href="#projects">projects</a><a href="#contact" class="keep">contact</a>
+  <button class="k mono" id="openPal">Ctrl K</button>
+</nav>
 
-    <!-- Navigation Bar -->
-    <nav class="sticky top-0 z-50 bg-black/60 backdrop-blur-lg border-b border-gray-800/50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex-shrink-0">
-                    <a href="#home" class="text-red-accent font-bold text-xl">// cr4z3sku11</a>
-                </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#home" class="nav-link active px-3 py-2 rounded-md text-sm font-medium">HOME</a>
-                        <a href="#about" class="nav-link px-3 py-2 rounded-md text-sm font-medium">ABOUT</a>
-                        <a href="#experience" class="nav-link px-3 py-2 rounded-md text-sm font-medium">EXPERIENCE</a>
-                        <a href="#skills" class="nav-link px-3 py-2 rounded-md text-sm font-medium">SKILLS</a>
-                        <a href="#projects" class="nav-link px-3 py-2 rounded-md text-sm font-medium">PROJECTS</a>
-                        <a href="#contact" class="nav-link px-3 py-2 rounded-md text-sm font-medium">CONTACT</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
+<main class="wrap">
+<!-- HERO -->
+<section id="home" class="hero" style="padding-top:120px">
+  <div>
+    <span class="badge mono"><i class="dot"></i> available · Colombo, Sri Lanka</span>
+    <h1>Chandika<br><span class="grad" id="scr">Nawodya</span> Senarathna</h1>
+    <div class="role mono">&gt; <b id="typed"></b><span class="cur"></span></div>
+    <p class="lead">Associate System Engineer (Google Workspace, Check Point, DevOps) with a SOC analyst's background. I keep infrastructure running, keep attackers out, and study Cyber Security &amp; Digital Forensics at Kingston University.</p>
+    <div class="btns">
+      <a href="#projects" class="btn p">View projects</a>
+      <a href="CHANDIKA-NAWODYA-SENARATHNA-CV.pdf" download class="btn">Download CV</a>
+    </div>
+    <div class="chips"><span class="chip">CRTA certified</span><span class="chip">AWS Incident Response</span><span class="chip">Google SecOps SIEM &amp; SOAR</span><span class="chip">Top 1% TryHackMe</span></div>
+  </div>
 
+  <div class="card soc" id="tilt">
+    <div class="soc-h mono"><span>● soc-console / live</span><span>simulated feed</span></div>
+    <div class="avatar"><img src="CV.jpg" alt="Chandika"><div><b>cr4z3sku11</b><small class="mono">Associate System Engineer</small><small class="mono" style="color:var(--lime)">status: monitoring</small></div></div>
+    <canvas id="spark" height="80"></canvas>
+    <div class="stats">
+      <div class="stat"><b id="s1">0</b><span>events / s</span></div>
+      <div class="stat"><b id="s2" style="color:var(--alert)">0</b><span>alerts blocked</span></div>
+      <div class="stat"><b style="color:var(--lime)">99.9%</b><span>uptime goal</span></div>
+    </div>
+    <div id="feed" class="mono"></div>
+  </div>
+</section>
 
-    <!-- Header / Hero Section -->
-    <header id="home" class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-        <div class="absolute inset-0 z-0 opacity-10" style="background-image: linear-gradient(#ff3c3c 1px, transparent 1px), linear-gradient(to right, #ff3c3c 1px, transparent 1px); background-size: 2rem 2rem;"></div>
-        <div class="absolute inset-0 bg-black/80 z-0"></div>
+<!-- TERMINAL -->
+<section id="terminal" class="rv" style="padding-top:20px">
+  <div class="eyebrow">// interactive shell</div>
+  <h2>Prefer the command line?</h2>
+  <div class="term">
+    <div class="term-h"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span>cr4z3sku11@portfolio:~</span></div>
+    <div id="tbody"></div>
+  </div>
+  <div class="hint" id="hint"></div>
+</section>
 
-        <div class="text-center z-10 grid md:grid-cols-3 gap-8 items-center max-w-6xl mx-auto">
-            <div class="md:col-span-2 text-left">
-                <h1 class="text-4xl md:text-6xl font-bold mb-2 font-tech">Chandika Nawodya Senarathna</h1>
-                <p class="text-xl md:text-2xl text-red-accent mb-4 font-semibold font-tech">// cr4z3sku11</p>
-                <p class="text-lg md:text-xl h-8">
-                    I am a <span id="typed-text" class="text-red-accent font-bold"></span><span class="typed-cursor">|</span>
-                </p>
-                <p class="mt-6 max-w-2xl text-gray-300">
-                    A dedicated professional merging IT Support and Cybersecurity. Welcome to my digital domain!
-                </p>
-                <div class="mt-8 flex gap-4 justify-start">
-                    <a href="#projects" class="bg-red-accent text-white py-2 px-6 rounded-lg font-bold hover:bg-opacity-80 transition-all">View Projects</a>
-                    <a href="#contact" class="border-2 border-red-accent text-white py-2 px-6 rounded-lg font-bold hover:bg-red-accent transition-all">Contact Me</a>
-                </div>
-            </div>
-            <div class="flex justify-center">
-                <!-- Ensure CV.jpg exists in your folder or replace with a valid placeholder -->
-                <img src="CV.jpg" alt="Chandika Nawodya Senarathna" class="w-64 h-64 md:w-80 md:h-80 rounded-full object-cover border-4 border-red-accent shadow-glow" onerror="this.src='https://via.placeholder.com/300x300/000000/ff3c3c?text=CNS'">
-            </div>
-        </div>
-    </header>
+<!-- ABOUT -->
+<section id="about" class="rv">
+  <div class="eyebrow">root@cr4z3sku11:~# cat about.txt</div>
+  <h2>Where IT operations meet security.</h2>
+  <div class="bento">
+    <div class="card c-a"><h3>Systems engineer, SOC-trained</h3>
+      <p style="color:#b6bfd2">Currently I'm an Associate System Engineer at eMarketingEye, covering Google Workspace administration, Check Point firewall management, IT infrastructure administration, end-user support and DevOps practices. I started my career as a Junior SOC Analyst at CryptoGen, where I did security monitoring, threat detection, incident analysis, SIEM/SOAR operations, cyber threat intelligence and dark web monitoring with FortiSIEM, Google Chronicle and CrowdStrike.</p>
+      <p style="color:#b6bfd2;margin-top:12px">I'm currently pursuing a BSc (Hons) in Cyber Security &amp; Digital Forensics while expanding my expertise across system administration, cloud, DevOps and cybersecurity. Ranked in the Top 1% on TryHackMe and an active participant in Hack The Box CTF competitions, with a strong passion for infrastructure security, automation and continuous learning.</p>
+      <div class="tags"><span class="tag">Google Workspace</span><span class="tag">Check Point firewall</span><span class="tag">DevOps</span><span class="tag">SOC background</span><span class="tag">Cyber threat intelligence</span></div></div>
+    <div class="card c-b"><div class="big">15+</div><h3>Certifications &amp; micro-credentials</h3><p style="color:var(--mute);font-size:.88rem">Google Cloud, AWS, Microsoft, Fortinet, Cisco, ISC2, CyberWarFare Labs.</p></div>
+    <div class="card c-c vis" id="sk1"><h3>IT &amp; Systems</h3>
+      <div class="bar"><div><span>Windows / Server</span><span>●</span></div><i style="--w:90%"></i></div>
+      <div class="bar"><div><span>Active Directory &amp; GPO</span><span>●</span></div><i style="--w:85%"></i></div>
+      <div class="bar"><div><span>VMware ESXi</span><span>●</span></div><i style="--w:80%"></i></div>
+      <div class="tags"><span class="tag">Google Workspace</span><span class="tag">Check Point</span><span class="tag">DevOps</span><span class="tag">Microsoft 365</span><span class="tag">ServiceNow</span><span class="tag">Azure &amp; AWS basics</span></div></div>
+    <div class="card c-d vis" id="sk2"><h3>Cybersecurity <span style="color:var(--mute);font-weight:400;font-size:.8rem">(SOC background)</span></h3>
+      <div class="bar"><div><span>Log analysis &amp; SIEM</span><span>●</span></div><i style="--w:88%"></i></div>
+      <div class="bar"><div><span>EDR / XDR</span><span>●</span></div><i style="--w:80%"></i></div>
+      <div class="bar"><div><span>Threat intel writing</span><span>●</span></div><i style="--w:82%"></i></div>
+      <div class="tags"><span class="tag">FortiSIEM</span><span class="tag">Chronicle SOAR</span><span class="tag">CrowdStrike</span><span class="tag">Wazuh</span></div></div>
+  </div>
+</section>
 
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-24">
+<!-- EXPERIENCE -->
+<section id="experience" class="rv">
+  <div class="eyebrow">root@cr4z3sku11:~# tail -f incident.log</div>
+  <h2>Incident log.</h2>
+  <div class="tl">
+    <div class="card live"><div class="meta"><h3>Associate System Engineer<span class="live-tag"><i></i>ACTIVE</span></h3><span class="mono">Jun 2026 - Present</span></div>
+      <div class="meta"><span>eMarketingEye · Sri Lanka · On-site</span></div>
+      <p style="color:#b6bfd2;font-size:.92rem">Google Workspace administration, Check Point firewall management, IT infrastructure, end-user support and DevOps practices in a high-availability environment.</p></div>
+    <div class="card"><div class="meta"><h3>Junior SOC Analyst</h3><span class="mono">Nov 2025 - Jun 2026</span></div>
+      <div class="meta"><span>CryptoGen · Sri Lanka · On-site</span></div>
+      <p style="color:#b6bfd2;font-size:.92rem">Security monitoring, threat detection, incident analysis and SIEM/SOAR operations with FortiSIEM, Google Chronicle and CrowdStrike, plus CTI and dark web monitoring.</p></div>
+    <div class="card"><div class="meta"><h3>Graphics Designer</h3><span class="mono">Sep 2025 - Nov 2025</span></div>
+      <div class="meta"><span>Beyond Brand Media · USA · Remote</span></div>
+      <p style="color:#b6bfd2;font-size:.92rem">Delivered visual assets for digital marketing campaigns with international teams.</p></div>
+  </div>
+</section>
 
-        <!-- Interactive Terminal -->
-        <section class="reveal terminal-highlight rounded-lg">
-            <div id="terminal" class="terminal rounded-lg shadow-2xl shadow-red-900/20">
-                <div class="terminal-header p-2 flex items-center">
-                    <div class="flex space-x-2">
-                        <span class="w-3 h-3 bg-red-500 rounded-full"></span>
-                        <span class="w-3 h-3 bg-yellow-500 rounded-full"></span>
-                        <span class="w-3 h-3 bg-green-500 rounded-full"></span>
-                    </div>
-                    <p class="flex-1 text-center text-sm text-gray-400">bash -- portfolio_nav</p>
-                </div>
-                <div id="terminal-body" class="p-4 h-64 overflow-y-auto font-mono text-sm">
-                    <!-- Terminal content will be generated here -->
-                </div>
-            </div>
-        </section>
+<!-- CREDENTIALS -->
+<section id="credentials" class="rv">
+  <div class="eyebrow">root@cr4z3sku11:~# gpg --list-keys</div>
+  <h2>Education &amp; certifications.</h2>
+  <div class="two">
+    <div style="display:flex;flex-direction:column;gap:18px">
+    <div class="card" style="padding:26px">
+      <h3 style="margin-bottom:6px">BSc (Hons) Cyber Security &amp; Digital Forensics</h3>
+      <p class="mono" style="color:var(--cyan);font-size:.85rem">Kingston University · in progress</p>
+      <p style="color:#b6bfd2;font-size:.9rem;margin-top:12px">Forensic analysis, secure systems and incident handling, studied alongside full-time industry work.</p>
+      <div class="tags"><span class="tag">Digital forensics</span><span class="tag">Security</span></div>
+    </div>
+    <div class="card" style="padding:26px">
+      <h3 style="margin-bottom:6px">Pearson BTEC Level 5 HND, Computing</h3>
+      <p class="mono" style="color:var(--cyan);font-size:.85rem">ESOFT Metro Campus · Mar 2024 - Jul 2025</p>
+      <p style="color:#b6bfd2;font-size:.9rem;margin-top:12px">Pearson BTEC Level 5 HND in Computing, specialized in Cyber Security.</p>
+      <div class="tags"><span class="tag">Haxsora CTF Team</span><span class="tag">Cyber Security</span></div>
+    </div>
+    </div>
+    <div class="card">
+      <div class="cert-hl">
+        <div class="cert"><span class="ic">RT</span><div><b>Certified Red Team Analyst (CRTA)</b><small>CyberWarFare Labs · 2025</small></div></div>
+        <div class="cert"><span class="ic">IR</span><div><b>AWS Incident Response - Demonstrated microcredential</b><small>Amazon Web Services · investigation, containment, forensic evidence, hardening</small></div></div>
+        <div class="cert"><span class="ic">G</span><div><b>Google Security Operations: SIEM · SOAR Analyst · SOAR Developer</b><small>Google Cloud · incl. Chronicle SOAR Fundamentals</small></div></div>
+        <div class="cert"><span class="ic">FT</span><div><b>FCF - Introduction to the Threat Landscape 2.0</b><small>Fortinet · 2024</small></div></div>
+      </div>
+      <div class="tags" style="margin-top:16px">
+        <span class="tag">AWS Cloud Practitioner Essentials</span><span class="tag">AZ-900</span><span class="tag">SC-900</span>
+        <span class="tag">ISC2 CC pre-assessment</span><span class="tag">Cisco: Intro to Cybersecurity</span><span class="tag">Cisco: OS &amp; Hardware Basics</span>
+        <span class="tag">OPSWAT CIP</span><span class="tag">Cybersecurity Foundations</span>
+      </div>
+    </div>
+  </div>
+  <div class="card quote">
+    <p>“They consistently demonstrated strong analytical skills, professionalism and a solid understanding of security incident handling and threat detection… dependable in monitoring alerts, investigating suspicious activities and responding to incidents efficiently.”</p>
+    <cite>- Nethsara Disanayaka · LinkedIn recommendation</cite>
+  </div>
+</section>
 
-        <!-- About Me -->
-        <section id="about" class="reveal">
-            <h2 class="text-3xl font-bold text-center mb-12 font-tech"><span class="text-red-accent">01.</span> About Me</h2>
-            <div class="text-center max-w-3xl mx-auto text-gray-300 leading-relaxed">
-                <p class="mb-4">
-                    A versatile and dedicated IT professional focused on robust technical support and cutting-edge cybersecurity. As a top-ranked learner on TryHackMe, I bring an analytical, security-first mindset to every challenge, from architecting home lab environments with Active Directory to hunting down vulnerabilities in CTF competitions.
-                </p>
-                <p>
-                    I thrive on troubleshooting and securing digital landscapes, ensuring operational integrity and resilience against emerging threats.
-                </p>
-            </div>
-        </section>
+<!-- PROJECTS -->
+<section id="projects" class="rv">
+  <div class="eyebrow">root@cr4z3sku11:~# ls ./labs</div>
+  <h2>Labs &amp; field work.</h2>
+  <div class="grid3">
+    <a class="card proj" href="https://github.com/dragon-balerion/soc-home-lab-wazuh" target="_blank" rel="noopener">
+      <div class="im"><img src="home-soc-lab.png" alt="Home SOC Lab"></div>
+      <div class="b"><span class="eyebrow">Blue team / SIEM</span><h3>Home SOC Lab</h3>
+      <p>Deployed a functional SOC lab with Wazuh SIEM for log analysis and threat detection, simulated attacks and built monitoring protocols.</p><span class="lnk">view repo →</span></div></a>
+    <div class="card proj">
+      <div class="im"><img src="lab.jpg" alt="IT Admin Lab"></div>
+      <div class="b"><span class="eyebrow">System administration</span><h3>IT Admin Lab</h3>
+      <p>Virtualized Windows domain on VMware: AD DS, DNS, DHCP and GPOs to manage users and harden endpoints.</p></div></div>
+    <div class="card proj">
+      <div class="im"><img src="ctf.png" alt="CTF"></div>
+      <div class="b"><span class="eyebrow">Offensive / defensive</span><h3>Capture The Flag</h3>
+      <p>Active in CTF events such as Hack The Box with top rankings under time pressure.</p></div></div>
+    <div class="card proj">
+      <div class="im gen">.NET</div>
+      <div class="b"><span class="eyebrow">Software · Aug-Sep 2024</span><h3>Leave Management System</h3>
+      <p>C# / .NET Windows Forms app with separate employee and admin portals for applying, tracking and approving leave.</p></div></div>
+    <div class="card proj">
+      <div class="im gen">NET</div>
+      <div class="b"><span class="eyebrow">Networking · May-Sep 2024</span><h3>BlueScope Networking System</h3>
+      <p>Designed a network linking two data centers (Melbourne and Darwin) with a multi-department primary hub for secure data exchange.</p></div></div>
+  </div>
+</section>
 
-        <!-- Experience Section -->
-        <section id="experience" class="reveal">
-            <h2 class="text-3xl font-bold text-center mb-12 font-tech"><span class="text-red-accent">02.</span> Professional Experience</h2>
-            <div class="relative border-l-2 border-gray-800 ml-4 md:ml-10 space-y-12">
+<!-- CONTACT -->
+<section id="contact" class="rv">
+  <div class="card cta">
+    <div class="eyebrow">root@cr4z3sku11:~# ssh hello@cr4z3sku11</div>
+    <h2>Let's secure something together.</h2>
+    <p style="color:#b6bfd2;max-width:520px;margin:0 auto">Question, project or just a hello - my inbox is open.</p>
+    <div class="soc-links">
+      <a class="btn p" href="mailto:chandikanawodya59@gmail.com">Say hello</a>
+      <a class="btn" href="https://www.linkedin.com/in/chandika-n-senarathna/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" href="https://github.com/dragon-balerion" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="https://linktr.ee/chandikanawodya" target="_blank" rel="noopener">Linktree</a>
+    </div>
+  </div>
+</section>
+</main>
+<footer>© 2026 Chandika Nawodya Senarathna · press <span class="mono">Ctrl K</span> for the command palette</footer>
 
-                <!-- Experience 1 -->
-                <div class="relative pl-8 md:pl-12">
-                    <div class="absolute -left-[9px] top-0 w-5 h-5 bg-red-accent rounded-full shadow-glow"></div>
-                    <div class="bg-[#1a1a1a] p-6 rounded-lg border border-gray-800 hover:border-red-accent transition-all">
-                        <div class="flex flex-col md:flex-row justify-between mb-4">
-                            <h3 class="text-xl font-bold text-white"> Associate System Engineer <span class="text-xs px-2 py-1 bg-green-900 text-green-300 rounded ml-2">On-site</span></h3>
-                            <span class="text-red-accent font-mono text-sm">June 2026 - Present</span>
-                        </div>
-                        <h4 class="text-lg text-gray-400 mb-4 font-semibold">eMarketingEye, Sri Lanka</h4>
-                        <p class="text-gray-300 text-sm leading-relaxed">
-                            Monitoring and maintaining enterprise system infrastructure, investigating potential reliability or performance issues and contributing to the organization's high-availability posture. Engaging in real-time system performance optimization and infrastructure support protocols.
-                        </p>
-                    </div>
-                </div>
+<div id="ticker"><div><i>[OK]</i> firewall: enforcing &nbsp;·&nbsp; <b>[ALERT]</b> brute-force blocked rdp &nbsp;·&nbsp; <i>[OK]</i> edr agents: online &nbsp;·&nbsp; <b>[ALERT]</b> C2 beacon quarantined &nbsp;·&nbsp; <i>[OK]</i> patch compliance 98% &nbsp;·&nbsp; threat level: <b>ELEVATED</b> &nbsp;·&nbsp; <i>[OK]</i> SIEM ingest nominal &nbsp;·&nbsp; <b>[ALERT]</b> suspicious powershell contained &nbsp;·&nbsp; session: cr4z3sku11 // all traffic simulated</div></div>
+<div id="pal"><div class="box"><input id="pin" placeholder="Type a command…  (home, about, experience, projects, contact, cv)"><ul id="plist"></ul></div></div>
 
-                <!-- Experience 2 -->
-                <div class="relative pl-8 md:pl-12">
-                    <div class="absolute -left-[9px] top-0 w-5 h-5 bg-[#333] border-2 border-red-accent rounded-full"></div>
-                    <div class="bg-[#1a1a1a] p-6 rounded-lg border border-gray-800 hover:border-red-accent transition-all">
-                        <div class="flex flex-col md:flex-row justify-between mb-4">
-                            <h3 class="text-xl font-bold text-white">Junior SOC Analyst <span class="text-xs px-2 py-1 bg-green-900 text-green-300 rounded ml-2">On-site</span></h3>
-                            <span class="text-red-accent font-mono text-sm">Nov 2025 - June 2026</span>
-                        </div>
-                        <h4 class="text-lg text-gray-400 mb-4 font-semibold">CryptoGen, Sri Lanka</h4>
-                        <p class="text-gray-300 text-sm leading-relaxed">
-                            Monitoring and analyzing security alerts, investigating potential incidents, and contributing to the organization's security posture. Engaging in real-time threat detection and response protocols.
-                        </p>
-                    </div>
-                </div>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
 
-                <!-- Experience 3 -->
-                <div class="relative pl-8 md:pl-12">
-                    <div class="absolute -left-[9px] top-0 w-5 h-5 bg-[#333] border-2 border-red-accent rounded-full"></div>
-                    <div class="bg-[#1a1a1a] p-6 rounded-lg border border-gray-800 hover:border-red-accent transition-all">
-                        <div class="flex flex-col md:flex-row justify-between mb-4">
-                            <h3 class="text-xl font-bold text-white">Graphics Designer <span class="text-xs px-2 py-1 bg-blue-900 text-blue-300 rounded ml-2">Remote</span></h3>
-                            <span class="text-red-accent font-mono text-sm">Sep 2025 - Nov 2025</span>
-                        </div>
-                        <h4 class="text-lg text-gray-400 mb-4 font-semibold">Beyond Brand Media - BBM, USA</h4>
-                        <p class="text-gray-300 text-sm leading-relaxed">
-                            Collaborated with international teams to deliver high-quality visual assets for digital marketing campaigns.
-                        </p>
-                    </div>
-                </div>
+/* cursor glow + card spotlight */
+addEventListener('pointermove',e=>{
+  document.documentElement.style.setProperty('--mx',e.clientX+'px');
+  document.documentElement.style.setProperty('--my',e.clientY+'px');
+  const c=e.target.closest?.('.card'); if(c){const r=c.getBoundingClientRect();c.style.setProperty('--cx',e.clientX-r.left+'px');c.style.setProperty('--cy',e.clientY-r.top+'px')}
+});
 
-            </div>
-        </section>
+/* particle network w/ occasional "attack pulse" */
+const cv=$('#net'),cx=cv.getContext('2d');let W,H,P=[],mouse={x:-999,y:-999},pulses=[];
+function size(){W=cv.width=innerWidth;H=cv.height=innerHeight;P=Array.from({length:Math.min(90,W*H/16000|0)},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3}))}
+addEventListener('resize',size);size();
+addEventListener('pointermove',e=>{mouse.x=e.clientX;mouse.y=e.clientY});
+function frame(){
+  cx.clearRect(0,0,W,H);
+  for(const p of P){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1}
+  for(let i=0;i<P.length;i++){const a=P[i];
+    for(let j=i+1;j<P.length;j++){const b=P[j],d=Math.hypot(a.x-b.x,a.y-b.y);
+      if(d<140){cx.strokeStyle=`rgba(80,150,255,${.16*(1-d/140)})`;cx.beginPath();cx.moveTo(a.x,a.y);cx.lineTo(b.x,b.y);cx.stroke()}}
+    const dm=Math.hypot(a.x-mouse.x,a.y-mouse.y);
+    if(dm<170){cx.strokeStyle=`rgba(34,228,255,${.5*(1-dm/170)})`;cx.beginPath();cx.moveTo(a.x,a.y);cx.lineTo(mouse.x,mouse.y);cx.stroke()}
+    cx.fillStyle='rgba(120,190,255,.7)';cx.beginPath();cx.arc(a.x,a.y,1.5,0,7);cx.fill()}
+  for(const u of pulses){u.r+=2.2;u.a-=.014;cx.strokeStyle=`rgba(255,77,94,${Math.max(u.a,0)})`;cx.beginPath();cx.arc(u.x,u.y,u.r,0,7);cx.stroke()}
+  pulses=pulses.filter(u=>u.a>0);
+  if(!reduce)requestAnimationFrame(frame)
+}
+frame();
+setInterval(()=>{const p=P[Math.random()*P.length|0];if(p)pulses.push({x:p.x,y:p.y,r:2,a:.7})},3500);
 
-        <!-- Skills -->
-        <section id="skills" class="reveal">
-            <h2 class="text-3xl font-bold text-center mb-12 font-tech"><span class="text-red-accent">03.</span> My Skillset</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                <div class="bg-[#1a1a1a] p-6 rounded-lg border border-gray-800 hover:border-red-accent hover:shadow-glow transition-all">
-                    <h3 class="text-xl font-bold text-red-accent mb-4 font-tech"><i class="fas fa-headset mr-2"></i>IT Support</h3>
-                    <ul class="space-y-2 text-gray-300">
-                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>Windows 10/11 & Server</li>
-                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>Software/Hardware Troubleshooting</li>
-                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>Active Directory & GPO</li>
-                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>Microsoft 365 & ServiceNow</li>
-                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>VMware ESXi & Workstation</li>
-                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>User Administration</li>
-                    </ul>
-                </div>
-                <div class="bg-[#1a1a1a] p-6 rounded-lg border border-gray-800 hover:border-red-accent hover:shadow-glow transition-all">
-                    <h3 class="text-xl font-bold text-red-accent mb-4 font-tech"><i class="fas fa-shield-halved mr-2"></i>Cybersecurity</h3>
-                    <ul class="space-y-2 text-gray-300">
-                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>Cyber Threat Intelligence(CTI) Advisories Writing</li>
-                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>Log Analysis</li>
-                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>FortiSIEM</li>
-                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>Google Chronicle SOAR</li>
-                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>CrowdStrike EDR/XDR</li>
-                        <li><i class="fas fa-check-circle text-red-accent mr-2"></i>Maintain Shift Handovers</li>
+/* scramble / decrypt name */
+function scramble(el,final){const ch='!<>-_\\/[]{}=+*^?#01';let f=0;const t=setInterval(()=>{
+  el.textContent=[...final].map((c,i)=>i<f/2?c:ch[Math.random()*ch.length|0]).join('');if(++f>final.length*2){clearInterval(t);el.textContent=final}},40)}
+if(!reduce)scramble($('#scr'),'Nawodya');$('#scr').addEventListener('mouseenter',()=>!reduce&&scramble($('#scr'),'Nawodya'));
 
-                    </ul>
-                </div>
-            </div>
-        </section>
+/* typed roles */
+const roles=['Associate System Engineer','Junior SOC Analyst','Cybersecurity Undergraduate','CTF Player'];let ri=0,ci=0,del=false;
+(function tick(){const w=roles[ri];$('#typed').textContent=w.slice(0,ci);
+  if(!del&&ci===w.length){del=true;return setTimeout(tick,1600)}
+  if(del&&ci===0){del=false;ri=(ri+1)%roles.length}
+  ci+=del?-1:1;setTimeout(tick,del?35:75)})();
 
-        <!-- Projects -->
-        <section id="projects" class="reveal">
-            <h2 class="text-3xl font-bold text-center mb-12 font-tech"><span class="text-red-accent">04.</span> Projects</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                 <!-- Project 1: Home SOC Lab (Clickable) -->
-                 <!-- Replace the href below with your actual repository URL -->
-                 <a href="https://github.com/dragon-balerion/soc-home-lab-wazuh.git" target="_blank" class="block bg-[#1a1a1a] rounded-lg overflow-hidden border border-gray-800 group hover:border-red-accent hover:shadow-glow transition-all">
-                    <img src="home-soc-lab.png" alt="Home SOC Lab" class="w-full h-56 object-cover opacity-80 group-hover:opacity-100 transition-opacity" onerror="this.src='https://via.placeholder.com/600x400/111111/333333?text=Home+SOC+Lab'">
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-xs font-bold uppercase text-red-accent">Blue Team / SIEM</span>
-                            <i class="fas fa-external-link-alt text-gray-500 group-hover:text-white transition-colors"></i>
-                        </div>
-                        <h4 class="text-xl font-bold mb-2 text-white group-hover:text-red-accent transition-colors">Home SOC Lab</h4>
-                        <p class="text-gray-400 text-sm">Designed and deployed a fully functional Security Operations Center (SOC) home lab. Configured Wazuh SIEM for log analysis and threat detection, simulated attacks, and established monitoring protocols.</p>
-                    </div>
-                </a>
+/* simulated SOC telemetry */
+const sp=$('#spark'),sx=sp.getContext('2d');let data=Array(48).fill(40);
+function draw(){const w=sp.width=sp.clientWidth*devicePixelRatio,h=sp.height=80*devicePixelRatio;sx.clearRect(0,0,w,h);
+  const g=sx.createLinearGradient(0,0,0,h);g.addColorStop(0,'rgba(34,228,255,.35)');g.addColorStop(1,'rgba(34,228,255,0)');
+  sx.beginPath();data.forEach((v,i)=>{const x=i/(data.length-1)*w,y=h-(v/100)*h;i?sx.lineTo(x,y):sx.moveTo(x,y)});
+  sx.strokeStyle='#22e4ff';sx.lineWidth=2*devicePixelRatio;sx.stroke();sx.lineTo(w,h);sx.lineTo(0,h);sx.fillStyle=g;sx.fill()}
+let blocked=1204;const msgs=[['l','auth success  user=svc-backup'],['m','port scan detected  10.0.4.%'],['h','brute-force blocked  rdp'],['l','policy applied  GPO-Baseline'],['m','suspicious powershell  host-%'],['h','C2 beacon quarantined  edr'],['l','agent heartbeat  wazuh-%'],['l','patch compliance 98%']];
+function step(){const last=data.at(-1);data.push(Math.max(15,Math.min(95,last+(Math.random()-.5)*28)));data.shift();draw();
+  $('#s1').textContent=Math.round(300+data.at(-1)*9);
+  if(Math.random()<.55){const [s,t]=msgs[Math.random()*msgs.length|0];const f=$('#feed');const d=document.createElement('div');
+    if(s==='h'){blocked++;$('#s2').textContent=blocked}
+    d.innerHTML=`<span class="sev-${s}">[${s==='h'?'HIGH':s==='m'?'MED ':'INFO'}]</span> ${new Date().toTimeString().slice(0,8)} ${t.replace('%',Math.random()*250|0)}`;
+    f.prepend(d);while(f.children.length>7)f.lastChild.remove()}}
+$('#s2').textContent=blocked;step();setInterval(step,900);addEventListener('resize',draw);
 
-                <!-- Project 2: IT Administration Home Lab -->
-                <div class="bg-[#1a1a1a] rounded-lg overflow-hidden border border-gray-800 group flex flex-col hover:border-gray-600 transition-colors">
-                    <img src="lab.jpg" alt="IT Admin Lab" class="w-full h-56 object-cover opacity-80 group-hover:opacity-100 transition-opacity" onerror="this.src='https://via.placeholder.com/600x400/111111/333333?text=IT+Admin+Lab'">
-                    <div class="p-6 flex flex-col flex-grow">
-                        <span class="text-xs font-bold uppercase text-red-accent">System Administration</span>
-                        <h4 class="text-xl font-bold mt-2 mb-2 text-white font-tech">IT Admin Lab</h4>
-                        <p class="text-gray-400 flex-grow text-sm">Built a virtualized Windows domain environment using VMware. Configured Active Directory (AD DS), DNS, DHCP, and applied Group Policy Objects (GPO) to manage users and secure endpoints against unauthorized access.</p>
-                    </div>
-                </div>
+/* 3D tilt on SOC panel */
+const t=$('#tilt');if(!reduce&&matchMedia('(hover:hover)').matches){
+  t.addEventListener('pointermove',e=>{const r=t.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+    t.style.transform=`perspective(900px) rotateY(${x*8}deg) rotateX(${-y*8}deg)`});
+  t.addEventListener('pointerleave',()=>t.style.transform='')}
 
-                 <!-- Project 3: CTF -->
-                 <div class="bg-[#1a1a1a] rounded-lg overflow-hidden border border-gray-800 group flex flex-col hover:border-gray-600 transition-colors">
-                    <img src="ctf.png" alt="CTF Competitions" class="w-full h-56 object-cover opacity-80 group-hover:opacity-100 transition-opacity" onerror="this.src='https://via.placeholder.com/600x400/111111/333333?text=CTF+Events'">
-                    <div class="p-6 flex flex-col flex-grow">
-                        <span class="text-xs font-bold uppercase text-red-accent">Cybersecurity</span>
-                        <h4 class="text-xl font-bold mt-2 mb-2 text-white font-tech">Capture The Flag (CTF)</h4>
-                        <p class="text-gray-400 flex-grow text-sm">Actively participate in CTF events like Hack The Box, achieving top rankings and demonstrating practical offensive and defensive security skills in high-pressure environments.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+/* reveal + nav spy */
+const io=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add('vis')),{threshold:.12});
+$$('.rv').forEach(e=>io.observe(e));
+const spy=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)$$('nav a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-45% 0px -50% 0px'});
+$$('section[id]').forEach(s=>spy.observe(s));
 
-        <!-- Contact -->
-        <section id="contact" class="reveal">
-            <h2 class="text-3xl font-bold text-center mb-4 font-tech"><span class="text-red-accent">05.</span> Get In Touch</h2>
-            <p class="text-center max-w-xl mx-auto text-gray-400 mb-12">
-                My inbox is always open. Whether you have a question, a project proposal, or just want to say hi, I'll get back to you!
-            </p>
+/* always open at the top of the page */
+if('scrollRestoration' in history)history.scrollRestoration='manual';
+if(location.hash)history.replaceState(null,'',location.pathname+location.search);
+scrollTo(0,0);addEventListener('load',()=>scrollTo(0,0));
 
-            <div class="text-center">
-                 <a href="mailto:chandikanawodya59@gmail.com" class="inline-block bg-red-accent text-white py-3 px-8 rounded-lg font-bold hover:bg-opacity-80 transition-all text-lg">Say Hello</a>
+/* interactive terminal */
+const tb=$('#tbody'),PS='cr4z3sku11@portfolio:~$';let hist=[],hi=0;
+function out(t,c=''){const d=document.createElement('div');d.className='ln '+c;d.textContent=t;tb.appendChild(d)}
+const files={
+ whoami:'Chandika Nawodya Senarathna (cr4z3sku11)\nAssociate System Engineer @ eMarketingEye · Colombo, Sri Lanka',
+ about:'Ex-Junior SOC Analyst (CryptoGen), now Associate System Engineer: Google Workspace, Check Point firewall, infrastructure, DevOps. Top 1% on TryHackMe.',
+ skills:'IT: Google Workspace, Check Point firewall, Windows/Server, AD & GPO, DevOps, M365, ServiceNow, VMware\nSecurity (SOC background): FortiSIEM, Google Chronicle SIEM/SOAR, CrowdStrike EDR, CTI, dark web monitoring\nLabs: Wazuh, CTF (TryHackMe top 1%, Hack The Box)',
+ certs:'CRTA (CyberWarFare Labs)\nAWS Incident Response microcredential\nGoogle Security Operations: SIEM / SOAR Analyst / SOAR Developer\nFortinet FCF Threat Landscape 2.0\nAWS Cloud Practitioner Essentials · AZ-900 · SC-900\nISC2 CC pre-assessment · Cisco x3 · OPSWAT CIP',
+ education:'BSc (Hons) Cyber Security & Digital Forensics - Kingston University (in progress)\nPearson BTEC L5 HND Computing (Cyber Security) - ESOFT Metro Campus, 2024-2025',
+ experience:'2026-now  Associate System Engineer · eMarketingEye\n2025-2026 Junior SOC Analyst · CryptoGen\n2025      Graphics Designer · Beyond Brand Media',
+ projects:'Home SOC Lab (Wazuh) · IT Admin Lab (AD/VMware) · CTF · Leave Management System · BlueScope Networking',
+ contact:'mail: chandikanawodya59@gmail.com\nlinkedin.com/in/chandika-n-senarathna · github.com/dragon-balerion'
+};
+const jump={home:1,about:1,terminal:1,experience:1,credentials:1,projects:1,contact:1};
+const TERM={
+ help:()=>out('Commands: whoami, about, skills, certs, education, experience, projects, contact,\n          goto <section>, cv, neofetch, ls, clear, sudo','ac'),
+ ls:()=>out('about/  experience/  credentials/  projects/  contact/  cv.pdf'),
+ neofetch:()=>out('       .--.        cr4z3sku11@portfolio\n      |o_o |       --------------------\n      |:_/ |       Role   : Associate System Engineer\n     //   \\ \\      Focus  : SOC · IR · Cloud · Red-team basics\n    (|     | )     Certs  : 15+\n   /\'\\_   _/`\\      Status : monitoring ●\n   \\___)=(___/','ac'),
+ sudo:()=>out('cr4z3sku11 is not in the sudoers file. This incident will be reported. 😉','er'),
+ cv:()=>{out('Downloading CV…');location.href='CHANDIKA-NAWODYA-SENARATHNA-CV.pdf'},
+ clear:()=>{tb.innerHTML=''}
+};
+function exec(raw){const cmd=raw.trim().toLowerCase();out(PS+' '+raw,'ps');if(!cmd)return;hist.push(raw);hi=hist.length;
+  const [c,arg]=cmd.split(/\s+/);
+  if(TERM[c])TERM[c]();
+  else if(files[c]){out(files[c]);if(jump[c]&&c!=='home')document.getElementById(c)?.scrollIntoView({behavior:'smooth'})}
+  else if(c==='goto'&&jump[arg]){out('→ '+arg,'dm');document.getElementById(arg)?.scrollIntoView({behavior:'smooth'})}
+  else out(`bash: ${c}: command not found. Type 'help'.`,'er');
+  tb.scrollTop=tb.scrollHeight}
+function prompt(){const l=document.createElement('div');l.className='tin';l.innerHTML='<span class="ps"></span><input spellcheck="false" autocomplete="off" aria-label="terminal input">';
+  l.firstChild.textContent=PS;tb.appendChild(l);const i=l.lastChild;
+  i.onkeydown=e=>{if(e.key==='Enter'){const v=i.value;l.remove();exec(v);prompt()}
+    else if(e.key==='ArrowUp'&&hist.length){hi=Math.max(0,hi-1);i.value=hist[hi];e.preventDefault()}
+    else if(e.key==='ArrowDown'){hi=Math.min(hist.length,hi+1);i.value=hist[hi]||''}};
+  tb.onclick=()=>i.focus();tb.scrollTop=tb.scrollHeight}
+out('Welcome - type "help" for commands, or tap a shortcut below.','dm');prompt();
+$('#hint').innerHTML=['help','whoami','skills','certs','neofetch','cv'].map(c=>`<button>${c}</button>`).join('');
+$('#hint').onclick=e=>{if(e.target.tagName==='BUTTON'){tb.querySelector('.tin')?.remove();exec(e.target.textContent);prompt()}};
 
-                <div class="mt-12 flex justify-center items-center gap-6">
-                    <a href="https://www.linkedin.com/in/chandika-n-senarathna/" target="_blank" class="text-gray-400 hover:text-red-accent text-2xl transition-colors"><i class="fab fa-linkedin"></i></a>
-                    <a href="https://github.com/dragon-balerion" target="_blank" class="text-gray-400 hover:text-red-accent text-2xl transition-colors"><i class="fab fa-github"></i></a>
-                    <a href="https://linktr.ee/chandikanawodya" target="_blank" class="text-gray-400 hover:text-red-accent text-2xl transition-colors"><i class="fas fa-tree"></i></a>
-                </div>
-                
-                <div class="download-btn-container mt-12">
-                     <a href="CHANDIKA-NAWODYA-SENARATHNA-CV.pdf" download class="border-2 border-red-accent text-white py-3 px-8 rounded-lg font-bold hover:bg-red-accent transition-all">
-                        <i class="fas fa-download mr-2"></i>Download My CV
-                    </a>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="text-center py-6 border-t border-gray-800">
-        <p class="text-gray-500">&copy; 2026 Chandika Nawodya Senarathna (cr4z3sku11). All Rights Reserved.</p>
-    </footer>
-
-    <script>
-        // --- Matrix Rain Animation ---
-        const canvas = document.getElementById('matrix-canvas');
-        const ctx = canvas.getContext('2d');
-        const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
-        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        const nums = '0123456789';
-        const alphabet = katakana + latin + nums;
-        const fontSize = 16;
-        let columns;
-        let rainDrops = [];
-        let matrixInterval;
-
-        function initializeMatrix() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            columns = Math.floor(canvas.width / fontSize);
-            rainDrops = [];
-            for (let x = 0; x < columns; x++) { rainDrops[x] = 1; }
-        }
-
-        const drawMatrix = () => {
-            ctx.fillStyle = 'rgba(10, 10, 10, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'rgba(255, 60, 60, 0.7)';
-            ctx.font = fontSize + 'px monospace';
-            for (let i = 0; i < rainDrops.length; i++) {
-                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) { rainDrops[i] = 0; }
-                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
-                rainDrops[i]++;
-            }
-        };
-
-        function startAnimation() {
-            initializeMatrix();
-            if (matrixInterval) clearInterval(matrixInterval);
-            matrixInterval = setInterval(drawMatrix, 33);
-        }
-        startAnimation();
-        let timeout;
-        window.addEventListener('resize', () => {
-            clearTimeout(timeout);
-            timeout = setTimeout(startAnimation, 150);
-        });
-
-        // --- Typing Animation (Updated) ---
-        const typedTextSpan = document.getElementById('typed-text');
-        const textArray = ["Associate System Engineer", "Junior SOC Analyst", "Cybersecurity Undergraduate"];
-        const typingDelay = 100;
-        const erasingDelay = 50;
-        const newTextDelay = 2000;
-        let textArrayIndex = 0;
-        let charIndex = 0;
-
-        function type() {
-            if (charIndex < textArray[textArrayIndex].length) {
-                typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
-                charIndex++;
-                setTimeout(type, typingDelay);
-            } else {
-                setTimeout(erase, newTextDelay);
-            }
-        }
-        function erase() {
-            if (charIndex > 0) {
-                typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex - 1);
-                charIndex--;
-                setTimeout(erase, erasingDelay);
-            } else {
-                textArrayIndex++;
-                if (textArrayIndex >= textArray.length) textArrayIndex = 0;
-                setTimeout(type, typingDelay + 1100);
-            }
-        }
-        document.addEventListener("DOMContentLoaded", function() {
-            if (textArray.length) setTimeout(type, newTextDelay + 250);
-        });
-        
-        // --- Interactive Terminal (No AI) ---
-        const terminalBody = document.getElementById('terminal-body');
-
-        function createNewInputLine() {
-             const newInputLine = document.createElement('div');
-             newInputLine.className = 'mt-2 flex';
-             newInputLine.innerHTML = `
-                <span class="text-green-400">user@cr4z3sku11:~$</span>
-                <input type="text" class="terminal-input bg-transparent border-none text-white focus:outline-none flex-1 ml-2" autofocus>`;
-             terminalBody.appendChild(newInputLine);
-             const newTerminalInput = newInputLine.querySelector('input');
-             newTerminalInput.focus();
-             newTerminalInput.addEventListener('keydown', handleTerminalInput);
-        }
-        
-        async function handleTerminalInput(event) {
-            if (event.key !== "Enter") return;
-
-            const terminalInput = event.target;
-            const command = terminalInput.value.trim().toLowerCase();
-            const prompt = `<div class="flex"><span class="text-green-400">user@cr4z3sku11:~$</span><span class="ml-2">${command}</span></div>`;
-            
-            terminalInput.disabled = true;
-            const parentDiv = terminalInput.parentElement;
-            parentDiv.innerHTML = prompt;
-
-            const output = document.createElement('div');
-            let response = '';
-
-            switch (command) {
-                case 'help':
-                    response = `
-                        <div>Available commands:</div>
-                        <ul class="list-inside list-disc pl-2">
-                            <li><span class="text-red-accent">'about'</span>, <span class="text-red-accent">'experience'</span>, <span class="text-red-accent">'skills'</span>, <span class="text-red-accent">'projects'</span>, <span class="text-red-accent">'contact'</span> - Scroll to section.</li>
-                            <li><span class="text-red-accent">'download cv'</span> - Initiates CV download.</li>
-                            <li><span class="text-red-accent">'clear'</span> - Clears the terminal.</li>
-                        </ul>
-                    `;
-                    break;
-                case 'about': case 'experience': case 'skills': case 'projects': case 'contact':
-                    response = `Navigating to ${command} section...`;
-                    document.getElementById(command).scrollIntoView({ behavior: 'smooth' });
-                    break;
-                case 'download cv':
-                        response = `Initiating CV download...`;
-                        document.querySelector('a[download]').click();
-                        break;
-                case 'clear':
-                    terminalBody.innerHTML = '';
-                    break;
-                default:
-                    response = `<div>bash: command not found: ${command}. Type 'help' for a list of commands.</div>`;
-            }
-            
-            if (response) {
-                output.innerHTML = response;
-                terminalBody.appendChild(output);
-            }
-
-            createNewInputLine();
-            terminalBody.scrollTop = terminalBody.scrollHeight;
-        }
-
-        // Initial setup for terminal
-        terminalBody.innerHTML = `<div>Welcome to my interactive terminal.</div>
-                                  <div>Type <span class="text-red-accent">'help'</span> for a full list of commands.</div>`;
-        createNewInputLine();
-        
-        // --- Reveal on Scroll ---
-        const revealElements = document.querySelectorAll('.reveal');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) { entry.target.classList.add('visible'); }
-            });
-        }, { threshold: 0.1 });
-        revealElements.forEach(el => { observer.observe(el); });
-
-        // --- Navbar Active State on Scroll ---
-        const sections = document.querySelectorAll('header, section[id]');
-        const navLinks = document.querySelectorAll('.nav-link');
-        const navObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const id = entry.target.getAttribute('id');
-                    navLinks.forEach(link => {
-                        link.classList.remove('active');
-                        if (link.getAttribute('href') === `#${id}`) {
-                            link.classList.add('active');
-                        }
-                    });
-                }
-            });
-        }, { rootMargin: '-50% 0px -50% 0px' });
-        sections.forEach(section => { navObserver.observe(section); });
-    </script>
+/* command palette */
+const cmds=[['home','go to top'],['about','skills & bio'],['terminal','interactive shell'],['experience','incident log'],['credentials','education & certs'],['projects','labs & CTF'],['contact','get in touch'],['cv','download CV'],['github','open GitHub'],['linkedin','open LinkedIn']];
+const pal=$('#pal'),pin=$('#pin'),pl=$('#plist');let sel=0,cur=cmds;
+function render(){pl.innerHTML=cur.map((c,i)=>`<li class="${i===sel?'sel':''}" data-i="${i}">${c[0]}<span>${c[1]}</span></li>`).join('')}
+function run(c){pal.classList.remove('open');
+  if(c[0]==='cv')location.href='CHANDIKA-NAWODYA-SENARATHNA-CV.pdf';
+  else if(c[0]==='github')open('https://github.com/dragon-balerion');
+  else if(c[0]==='linkedin')open('https://www.linkedin.com/in/chandika-n-senarathna/');
+  else document.getElementById(c[0])?.scrollIntoView({behavior:'smooth'})}
+function openPal(){pal.classList.add('open');pin.value='';cur=cmds;sel=0;render();pin.focus()}
+$('#openPal').onclick=openPal;
+addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openPal()}if(e.key==='Escape')pal.classList.remove('open')});
+pal.onclick=e=>{if(e.target===pal)pal.classList.remove('open')};
+pin.oninput=()=>{cur=cmds.filter(c=>c[0].includes(pin.value.toLowerCase()));sel=0;render()};
+pin.onkeydown=e=>{if(e.key==='ArrowDown')sel=Math.min(sel+1,cur.length-1);else if(e.key==='ArrowUp')sel=Math.max(sel-1,0);else if(e.key==='Enter'&&cur[sel])return run(cur[sel]);else return;e.preventDefault();render()};
+pl.onclick=e=>{const li=e.target.closest('li');if(li)run(cur[li.dataset.i])};
+</script>
 </body>
 </html>
